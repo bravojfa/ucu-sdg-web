@@ -1,0 +1,285 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  font-family: "Montserrat";
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+header {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr auto;
+  border-bottom: 2px solid #701212;
+  background-color: #912020;
+  padding: 1rem;
+}
+
+header img {
+  height: auto;
+  width: 180px;
+}
+
+.desktop {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.desktop a {
+  color: white;
+  font-size: 0.8rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease-out;
+  padding: 0.4rem 1.6rem;
+  font-weight: bold;
+}
+
+.desktop a:hover {
+  transform: scale(1.04);
+}
+
+aside {
+  opacity: 0;
+  height: 60vh;
+  position: relative;
+  transform: translateX(-300px);
+  transition: all 0.5s ease-out;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("images/ucu-eco.jpg");
+  grid-template-columns: auto auto;
+  background-position: left;
+  justify-content: center;
+  background-size: cover;
+  align-items: center;
+  padding: 1.4rem;
+  display: grid;
+  gap: 2rem;
+}
+
+aside h1 {
+  color: white;
+  text-align: center;
+  border-radius: 0.6rem;
+  background: linear-gradient(rgba(0, 0, 0, 0.64), rgba(0, 0, 0, 0.64));
+  transition: all 0.3s ease-out;
+  letter-spacing: 0.2rem;
+  font-size: 2.6rem;
+  padding: 2.6rem;
+}
+
+aside h1:hover {
+  transform: scale(1.05);
+}
+
+aside section {
+  align-items: start;
+  display: grid;
+  gap: 2rem;
+}
+
+aside p {
+  color: white;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+main {
+  padding: 2rem;
+}
+
+.divider {
+  display: grid;
+  text-align: center;
+  font-size: 1.2rem;
+  gap: 1rem;
+}
+
+.divider hr {
+  height: 0.4rem;
+  border: 2px solid #912020;
+}
+
+.divider hr:nth-child(1) {
+  border-top-right-radius: 0.4rem;
+  border-top-left-radius: 0.4rem;
+}
+
+.divider hr:nth-child(3) {
+  border-bottom-right-radius: 0.4rem;
+  border-bottom-left-radius: 0.4rem;
+}
+
+.divider h2 {
+  font-size: 2rem;
+  color: #912020;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: 34% 1fr;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.ui-img {
+  opacity: 0;
+  transform: translateX(-300px);
+  transition: all 0.5s ease-out;
+  border-radius: 0.4rem;
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+}
+
+.ui-img:hover {
+  transform: scale(1.02);
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.info section {
+  display: grid;
+  line-height: 1.5;
+  text-align: justify;
+  gap: 1rem;
+}
+
+.info .text {
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+  line-height: 1.5rem;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.ui-gm {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.ui-gm img {
+  border-radius: 0.4rem;
+  transition: all 0.3s ease-out;
+}
+.ui-gm img:hover {
+  transform: scale(1.05);
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+footer {
+  font-weight: normal;
+  display: grid;
+}
+
+.first {
+  padding: 2.4rem;
+  background: #912020;
+  border-top: 2px solid #701212;
+  grid-template-columns: repeat(auto-fill, 300px);
+  display: grid;
+  gap: 2rem;
+}
+
+.first h4 {
+  margin-top: 1rem;
+  color: white;
+}
+
+.ucu {
+  display: grid;
+  gap: 1rem;
+}
+
+.ucu .logo {
+  height: 100%;
+  width: 200px;
+}
+
+.socials {
+  align-items: center;
+  display: flex;
+  gap: 1.4rem;
+}
+
+.socials img {
+  display: block;
+  height: 24px;
+  width: 24px;
+}
+
+.website,
+.career,
+.contact {
+  display: flex;
+  gap: 2rem;
+  color: white;
+  flex-direction: column;
+}
+
+.website a,
+.career a,
+.contact a {
+  text-decoration: none;
+  transition: all 0.3s ease-out;
+  color: white;
+}
+
+.website a::before,
+.career a::before {
+  content: ">  ";
+  color: gold;
+}
+
+.website a:hover,
+.career a:hover {
+  transform: translateX(0.4rem);
+  transform: scale(1.05);
+}
+
+.contact img,
+.website img,
+.career img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  border-radius: 0.4rem;
+}
+
+.contact {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.contact section {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.bottom h3 {
+  text-decoration: underline;
+  text-underline-offset: 0.4rem;
+}
+
+.copyright {
+  color: white;
+  border-top: 1px solid #701212;
+  background: #1a4282;
+  text-align: center;
+  padding: 1.2rem;
+}
+
+.show {
+  opacity: 1;
+  transform: translateX(0);
+}
