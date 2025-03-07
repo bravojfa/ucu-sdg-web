@@ -5,6 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../style.css" />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+      /* Modal Styling */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
+        height: 100%;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(10px);
+        padding: 1rem;
+      }
+
+      .canvas-container {
+        overflow-y: scroll;
+        border-radius: 0.4rem;
+      }
+
+      .modal-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        height: 100%;
+        width: 60%;
+        position: relative;
+      }
+
+      .close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 24px;
+        color: #333;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .close:hover {
+        color: #d9534f;
+      }
+
+      h2 {
+        margin-bottom: 10px;
+        font-size: 20px;
+        color: #333;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 10px;
+      }
+
+      .controls button {
+        padding: 8px 16px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .controls button:hover {
+        background: #0056b3;
+      }
+
+      canvas {
+        width: 100% !important;
+        height: auto !important;
+        background: #222;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+    </style>
     <title>UCU Sustainable Development Goals</title>
   </head>
   <body>
@@ -61,9 +148,9 @@
               strengthen the institution's global reputation.
             </p>
             <section class="file">
-              <a href="pdf-viewer.html?file=../pdf/17.2.3.pdf" target="_blank"
-                >READ FULL DOCUMENT</a
-              >
+              <button onclick="openModal('../pdf/pasinaya-2022.pdf')">
+                READ FULL DOCUMENT
+              </button>
             </section>
           </section>
           <img src="../images/sdg17p1.png" alt="" />
@@ -231,6 +318,23 @@
       <hr />
     </main>
 
+    <!-- PDF Modal -->
+    <div id="pdfModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="canvas-container">
+          <canvas id="pdf-render"></canvas>
+        </div>
+        <div class="controls">
+          <button id="prev">Previous</button>
+          <span
+            >Page: <span id="page-num"></span> / <span id="page-count"></span
+          ></span>
+          <button id="next">Next</button>
+        </div>
+      </div>
+    </div>
+
     <footer>
       <section class="first">
         <section class="ucu">
@@ -284,6 +388,76 @@
     </footer>
 
     <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+      let pdfDoc = null,
+        pageNum = 1,
+        pageIsRendering = false,
+        pageNumIsPending = null;
+
+      const scale = 1.5;
+      const canvas = document.querySelector("#pdf-render");
+      const ctx = canvas.getContext("2d");
+      const modal = document.getElementById("pdfModal");
+
+      function openModal(pdfUrl) {
+        modal.style.display = "flex";
+        pdfjsLib.getDocument(pdfUrl).promise.then((pdfDoc_) => {
+          pdfDoc = pdfDoc_;
+          document.querySelector("#page-count").textContent = pdfDoc.numPages;
+          renderPage(pageNum);
+        });
+      }
+
+      function closeModal() {
+        modal.style.display = "none";
+        pdfDoc = null;
+        pageNum = 1;
+      }
+
+      function renderPage(num) {
+        pageIsRendering = true;
+        pdfDoc.getPage(num).then((page) => {
+          const viewport = page.getViewport({ scale });
+
+          // Set canvas size dynamically
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          const renderContext = { canvasContext: ctx, viewport: viewport };
+          const renderTask = page.render(renderContext);
+
+          renderTask.promise.then(() => {
+            pageIsRendering = false;
+            if (pageNumIsPending !== null) {
+              renderPage(pageNumIsPending);
+              pageNumIsPending = null;
+            }
+          });
+        });
+        document.querySelector("#page-num").textContent = num;
+      }
+
+      function queueRenderPage(num) {
+        if (pageIsRendering) {
+          pageNumIsPending = num;
+        } else {
+          renderPage(num);
+        }
+      }
+
+      document.querySelector("#prev").addEventListener("click", () => {
+        if (pageNum > 1) {
+          pageNum--;
+          queueRenderPage(pageNum);
+        }
+      });
+
+      document.querySelector("#next").addEventListener("click", () => {
+        if (pageNum < pdfDoc.numPages) {
+          pageNum++;
+          queueRenderPage(pageNum);
+        }
+      });
+    </script>
   </body>
 </html>
