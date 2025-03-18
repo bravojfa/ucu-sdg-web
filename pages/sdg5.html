@@ -640,7 +640,7 @@
       <hr />
     </main>
 
-    <!-- PDF Modal with improved UI and larger view -->
+    <!-- PDF Modal with improved UI and navigation at the bottom -->
     <div id="pdfModal" class="modal">
       <div class="modal-content">
         <div class="modal-header">
@@ -655,18 +655,16 @@
           <div class="loading" id="loading-indicator"></div>
         </div>
 
-        <!-- Side Navigation Buttons -->
-        <button id="prev" class="side-nav-btn nav-prev" disabled>
-          &lsaquo;
-        </button>
-        <button id="next" class="side-nav-btn nav-next" disabled>
-          &rsaquo;
-        </button>
-
         <div class="page-controls">
-          <div class="page-info">
-            Page <span id="page-num">0</span> of <span id="page-count">0</span>
+          <div class="page-navigation">
+            <button id="prev" class="side-nav-btn" disabled>&lsaquo;</button>
+            <div class="page-info">
+              Page <span id="page-num">0</span> of
+              <span id="page-count">0</span>
+            </div>
+            <button id="next" class="side-nav-btn" disabled>&rsaquo;</button>
           </div>
+
           <div class="zoom-controls">
             <button id="zoom-out" class="zoom-btn">-</button>
             <span id="zoom-level" class="zoom-level">100%</span>

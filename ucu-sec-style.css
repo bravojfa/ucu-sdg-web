@@ -12,6 +12,13 @@ img {
   height: auto;
 }
 
+ul {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
 header {
   display: grid;
   align-items: center;
@@ -29,7 +36,6 @@ header img {
 .desktop {
   display: flex;
   align-items: center;
-  gap: 2rem;
 }
 
 .desktop a {
@@ -82,7 +88,6 @@ aside h1:hover {
 aside section {
   align-items: start;
   display: grid;
-  gap: 2rem;
 }
 
 aside p {
@@ -99,7 +104,6 @@ main {
   display: grid;
   text-align: center;
   font-size: 1.2rem;
-  gap: 1rem;
 }
 
 .divider hr {
@@ -120,13 +124,13 @@ main {
 .divider h2 {
   font-size: 2rem;
   color: #912020;
+  text-align: center;
 }
 
 .info {
   display: grid;
   grid-template-columns: 34% 1fr;
-  padding: 2rem;
-  gap: 2rem;
+  align-items: start;
 }
 
 .ui-img {
@@ -148,23 +152,17 @@ main {
   display: grid;
   line-height: 1.5;
   text-align: justify;
-  gap: 1rem;
+  padding: 1rem;
+  gap: 2rem;
 }
 
 .info .text {
-  display: flex;
-  flex-direction: column;
-  text-align: justify;
   line-height: 1.5rem;
-  padding: 1rem;
-  gap: 1rem;
 }
 
 .ui-gm {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  padding: 2rem;
-  gap: 2rem;
 }
 
 .ui-gm img {

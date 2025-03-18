@@ -42,7 +42,7 @@ aside {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  padding: 2rem;
+  padding: 2.4rem;
   display: grid;
 }
 
@@ -53,12 +53,8 @@ aside img {
   transition: all 0.3s ease-out;
   border-radius: 0.8rem;
   background: white;
-  padding: 2.4rem;
+  padding: 2rem;
   width: 100%;
-}
-
-aside img:hover {
-  transform: scale(1.02);
 }
 
 .show {

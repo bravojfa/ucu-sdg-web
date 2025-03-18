@@ -341,23 +341,22 @@ h2 {
 }
 
 .side-nav-btn {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
-  border: none;
-  width: 60px;
-  height: 60px;
+  position: static; /* Remove fixed positioning */
+  transform: none; /* Remove the vertical centering */
+  margin: 0 10px; /* Add some horizontal spacing */
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 30px;
+  font-size: 24px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  z-index: 1100;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: none;
 }
 
 .nav-prev {
@@ -379,6 +378,13 @@ h2 {
   color: #999;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+/* Create a new container for the page navigation */
+.page-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 canvas {
@@ -447,5 +453,10 @@ canvas {
 
   .page-controls {
     flex-direction: column;
+    gap: 10px;
+  }
+
+  .page-navigation {
+    order: -1; /* Move navigation to the top on mobile */
   }
 }
