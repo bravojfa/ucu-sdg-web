@@ -148,11 +148,16 @@ main {
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
+.info {
+  padding-bottom: 2rem;
+}
+
 .info section {
   display: grid;
   line-height: 1.5;
   text-align: justify;
-  padding: 1rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
   gap: 2rem;
 }
 
