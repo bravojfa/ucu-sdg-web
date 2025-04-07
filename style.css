@@ -405,3 +405,17 @@ footer {
 .mobile-dropdown.active .mobile-dropdown-content {
   display: block;
 }
+
+/* Initially hide all year-specific SDG sections except the default one */
+.sdg-2023,
+.sdg-2024,
+.sdg-2025 {
+  display: none;
+}
+
+/* Style for active year in dropdown */
+.dropdown-content a.active,
+.mobile-dropdown-content a.active {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
