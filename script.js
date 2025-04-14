@@ -1,5 +1,3 @@
-// Fixed script.js file
-
 window.addEventListener("load", () => {
   let hero = document.querySelector("#hero");
   if (hero) {
