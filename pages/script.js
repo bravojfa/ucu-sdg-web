@@ -1,25 +1,54 @@
+// Base script functions remain the same
 window.addEventListener("load", () => {
   let hero = document.querySelector("#hero");
-  hero.classList.add("show");
+  if (hero) {
+    hero.classList.add("show");
+  }
 });
 
 let year = document.getElementById("year");
-year.innerText = new Date().getFullYear();
+if (year) {
+  year.innerText = new Date().getFullYear();
+}
 
+// Clear any existing navigation content to prevent duplicates
 let navigation = document.querySelector(".navigation");
-let navigationContent = document.createElement("section");
+if (navigation) {
+  navigation.innerHTML = "";
+}
 
-navigationContent.innerHTML = `
+// Create the navigation content with dynamic year dropdown
+function createNavigation() {
+  // Available years for SDG content
+  const availableYears = ["2023", "2024"];
+
+  // Create year dropdown items HTML
+  const yearOptions = availableYears
+    .map(
+      (year) =>
+        `<a href="#" class="year-option" data-year="${year}">${year}</a>`
+    )
+    .join("");
+
+  // Create navigation content
+  const navigationContent = document.createElement("section");
+  navigationContent.innerHTML = `
       <header>
-        <a href="../../index.html">
+        <a href="../index.html">
           <img src="../images/ucu-logo.png" alt="UCU Logo" />
         </a>
 
         <section class="desktop">
-          <a href="../../index.html">Home</a>
-          <a href="../../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
+          <a href="../index.html">Home</a>
+          <a href="../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
           <a href="#">Projects</a>
           <a href="#">About</a>
+          <div class="dropdown">
+            <button class="dropbtn">Select Year ▼</button>
+            <div class="dropdown-content">
+              ${yearOptions}
+            </div>
+          </div>
         </section>
 
         <section class="mobile">
@@ -28,25 +57,178 @@ navigationContent.innerHTML = `
       </header>
 
       <section class="links">
-        <a href="../../index.html">Home</a>
-        <a href="../../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
+        <a href="../index.html">Home</a>
+        <a href="../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
         <a href="#">Projects</a>
         <a href="#">About</a>
+        <div class="mobile-dropdown">
+          <a href="#" class="dropdown-title">Select Year ▼</a>
+          <div class="mobile-dropdown-content">
+            ${yearOptions}
+          </div>
+        </div>
       </section>
-`;
+  `;
 
-navigation.appendChild(navigationContent);
-
-let showMenu = document.querySelector(".mobile button");
-let menuLinks = document.querySelector(".links");
-
-showMenu.onclick = () => {
-  if (menuLinks.style.display === "grid") {
-    menuLinks.style.display = "none";
-  } else {
-    menuLinks.style.display = "grid";
+  if (navigation) {
+    navigation.appendChild(navigationContent);
   }
-};
+
+  return availableYears;
+}
+
+// Make sure all DOM content is loaded before initializing
+document.addEventListener("DOMContentLoaded", () => {
+  // Initialize navigation
+  const availableYears = createNavigation();
+
+  if (!availableYears || availableYears.length === 0) {
+    console.warn("No SDG year options available");
+    return;
+  }
+
+  let showMenu = document.querySelector(".mobile button");
+  let menuLinks = document.querySelector(".links");
+
+  if (showMenu && menuLinks) {
+    showMenu.onclick = () => {
+      if (menuLinks.style.display === "grid") {
+        menuLinks.style.display = "none";
+      } else {
+        menuLinks.style.display = "grid";
+      }
+    };
+  }
+
+  // Create no projects indicator element if it doesn't exist
+  let noProjectsIndicator = document.getElementById("no-projects-indicator");
+  if (!noProjectsIndicator) {
+    noProjectsIndicator = document.createElement("div");
+    noProjectsIndicator.id = "no-projects-indicator";
+    noProjectsIndicator.className = "no-projects-message";
+    noProjectsIndicator.innerHTML = `
+      <div class="message-content">
+        <img src="../images/info-icon.png" alt="Information" onerror="this.src='../images/sdg-logo.png'; this.style.opacity='0.4';">
+      </div>
+    `;
+
+    // Insert after the divider section
+    const dividerSection = document.querySelector("no-project");
+    if (dividerSection) {
+      dividerSection.parentNode.insertBefore(
+        noProjectsIndicator,
+        dividerSection.nextSibling
+      );
+    } else {
+      // Fallback - add to main
+      const mainElement = document.querySelector("main");
+      if (mainElement) {
+        mainElement.appendChild(noProjectsIndicator);
+      }
+    }
+
+    // Initially hide it
+    noProjectsIndicator.style.display = "none";
+  }
+
+  // MODIFIED FUNCTION: Updated to show indicator when no projects are available for selected year
+  function displayContentForYear(selectedYear) {
+    console.log("Displaying content for year:", selectedYear);
+
+    // Get all project sections
+    const projectSections = document.querySelectorAll(".project");
+
+    // Check if any project has the data-year attribute
+    const hasDataYearAttributes = Array.from(projectSections).some((section) =>
+      section.hasAttribute("data-year")
+    );
+
+    let visibleProjects = 0;
+
+    // If no project has data-year attribute, show all projects
+    if (!hasDataYearAttributes) {
+      projectSections.forEach((section) => {
+        section.style.display = "block"; // Show all projects
+        visibleProjects++;
+      });
+    } else {
+      // Show only projects with matching data-year attribute
+      projectSections.forEach((section) => {
+        const projectYear = section.getAttribute("data-year");
+        if (projectYear === selectedYear) {
+          section.style.display = "block";
+          visibleProjects++;
+        } else {
+          section.style.display = "none";
+        }
+      });
+    }
+
+    // Show or hide the no projects indicator
+    const noProjectsIndicator = document.getElementById(
+      "no-projects-indicator"
+    );
+    if (noProjectsIndicator) {
+      if (visibleProjects === 0) {
+        noProjectsIndicator.style.display = "block";
+      } else {
+        noProjectsIndicator.style.display = "none";
+      }
+    }
+
+    // Update dropdown button text
+    const dropbtn = document.querySelector(".dropbtn");
+    const dropdownTitle = document.querySelector(".dropdown-title");
+
+    if (dropbtn) dropbtn.textContent = `${selectedYear} ▼`;
+    if (dropdownTitle) dropdownTitle.textContent = `${selectedYear} ▼`;
+
+    // Store the selection in localStorage for persistence across page loads
+    localStorage.setItem("selectedSDGYear", selectedYear);
+  }
+
+  // Clear any previous event listeners by using delegated events
+  document.addEventListener("click", function (e) {
+    // Check if clicked element is a year option
+    if (e.target && e.target.classList.contains("year-option")) {
+      e.preventDefault();
+      const selectedYear = e.target.dataset.year;
+      displayContentForYear(selectedYear);
+
+      // Close the mobile menu if it's open
+      const menuLinks = document.querySelector(".links");
+      if (menuLinks && window.getComputedStyle(menuLinks).display === "grid") {
+        menuLinks.style.display = "none";
+      }
+    }
+  });
+
+  // Add click handler for mobile dropdown toggle
+  const mobileDropdownTitle = document.querySelector(".dropdown-title");
+  if (mobileDropdownTitle) {
+    mobileDropdownTitle.addEventListener("click", function (e) {
+      e.preventDefault();
+      const mobileDropdown = this.parentElement;
+      if (mobileDropdown) {
+        mobileDropdown.classList.toggle("active");
+      }
+    });
+  }
+
+  // Initialize the display based on stored preference or default to the oldest year
+  const storedYear = localStorage.getItem("selectedSDGYear");
+
+  // Use stored year if valid, otherwise use the oldest year
+  const initialYear =
+    storedYear && availableYears.includes(storedYear)
+      ? storedYear
+      : availableYears[0];
+
+  console.log("Initial year:", initialYear);
+
+  // Initial display
+  displayContentForYear(initialYear);
+});
 
 // PDF Viewer Script
 let pdfDoc = null,

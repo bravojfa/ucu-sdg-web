@@ -138,7 +138,6 @@ main {
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
   transform: translateX(-300px);
   transition: all 0.5s ease-out;
-  border: 4px double silver;
   border-radius: 0.4rem;
   object-fit: cover;
   height: auto;
@@ -175,7 +174,6 @@ main {
   border-radius: 0.4rem;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-out;
-  border: 4px double silver;
 }
 
 .ui-gm img:hover {

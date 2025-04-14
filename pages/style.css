@@ -460,3 +460,53 @@ canvas {
     order: -1; /* Move navigation to the top on mobile */
   }
 }
+
+/* No Projects Indicator Styles */
+.no-projects-message {
+  display: none; /* Hidden by default */
+  width: 100%;
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.message-content img {
+  width: 64px;
+  height: 64px;
+  opacity: 0.6;
+}
+
+.message-content p {
+  font-size: 1.2rem;
+  color: #555;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .no-projects-message {
+    padding: 2rem 1rem;
+  }
+
+  .message-content img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .message-content p {
+    font-size: 1rem;
+  }
+}
