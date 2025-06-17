@@ -16,7 +16,7 @@ if (navigation) {
   navigation.innerHTML = "";
 }
 
-// Create the navigation content with dynamic year dropdown
+// Create the navigation content with dynamic year dropdown and themes dropdown
 function createNavigation() {
   // Log all section classes to help debug
   console.log("All sections on page:");
@@ -25,7 +25,6 @@ function createNavigation() {
   });
 
   // Detect available SDG years from the HTML structure
-  // Check both for "sdg-YYYY" and "sdg-YYYY" (with any other classes)
   const availableYears = [];
 
   document.querySelectorAll("section").forEach((section) => {
@@ -59,6 +58,15 @@ function createNavigation() {
     )
     .join("");
 
+  // Create themes dropdown items HTML
+  const themesOptions = `
+    <a href="themes/planet.html">Planet</a>
+    <a href="themes/people.html">People</a>
+    <a href="themes/prosperity.html">Prosperity</a>
+    <a href="themes/peace.html">Peace</a>
+    <a href="themes/partnerships.html">Partnerships</a>
+  `;
+
   // Create navigation content
   const navigationContent = document.createElement("section");
   navigationContent.innerHTML = `
@@ -70,7 +78,12 @@ function createNavigation() {
         <section class="desktop">
           <a href="index.html">Home</a>
           <a href="ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-          <a href="#">Themes</a>
+          <div class="themes-dropdown">
+            <button class="dropbtn">Themes ▼</button>
+            <div class="dropdown-content">
+              ${themesOptions}
+            </div>
+          </div>
           <a href="#">About</a>
           <div class="dropdown">
             <button class="dropbtn">Select Year ▼</button>
@@ -88,7 +101,12 @@ function createNavigation() {
       <section class="links">
         <a href="index.html">Home</a>
         <a href="ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-        <a href="#">Themes</a>
+        <div class="mobile-themes-dropdown">
+          <a href="#" class="dropdown-title">Themes ▼</a>
+          <div class="mobile-dropdown-content">
+            ${themesOptions}
+          </div>
+        </div>
         <a href="#">About</a>
         <div class="mobile-dropdown">
           <a href="#" class="dropdown-title">Select Year ▼</a>
@@ -162,9 +180,11 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn(`Section for year ${selectedYear} not found`);
     }
 
-    // Update dropdown button text
-    const dropbtn = document.querySelector(".dropbtn");
-    const dropdownTitle = document.querySelector(".dropdown-title");
+    // Update dropdown button text for year selector
+    const dropbtn = document.querySelectorAll(".dropbtn")[1]; // Second dropdown is year selector
+    const dropdownTitle = document.querySelector(
+      ".mobile-dropdown .dropdown-title"
+    );
 
     if (dropbtn) dropbtn.textContent = `${selectedYear} ▼`;
     if (dropdownTitle) dropdownTitle.textContent = `${selectedYear} ▼`;
@@ -189,14 +209,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Add click handler for mobile dropdown toggle
-  const mobileDropdownTitle = document.querySelector(".dropdown-title");
-  if (mobileDropdownTitle) {
-    mobileDropdownTitle.addEventListener("click", function (e) {
+  // Add click handler for mobile dropdown toggles
+  const mobileDropdownTitles = document.querySelectorAll(".dropdown-title");
+  mobileDropdownTitles.forEach((title) => {
+    title.addEventListener("click", function (e) {
       e.preventDefault();
       const mobileDropdown = this.parentElement;
       if (mobileDropdown) {
+        // Close other dropdowns
+        mobileDropdownTitles.forEach((otherTitle) => {
+          if (otherTitle !== this) {
+            otherTitle.parentElement.classList.remove("active");
+          }
+        });
+        // Toggle current dropdown
         mobileDropdown.classList.toggle("active");
+      }
+    });
+  });
+
+  // Add click handler for themes dropdown on mobile
+  const mobileThemesTitle = document.querySelector(
+    ".mobile-themes-dropdown .dropdown-title"
+  );
+  if (mobileThemesTitle) {
+    mobileThemesTitle.addEventListener("click", function (e) {
+      e.preventDefault();
+      const mobileThemesDropdown = this.parentElement;
+      if (mobileThemesDropdown) {
+        mobileThemesDropdown.classList.toggle("active");
       }
     });
   }

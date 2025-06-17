@@ -50,11 +50,22 @@ aside img {
   height: auto;
   display: block;
   max-width: 1080px;
-  transition: all 0.3s ease-out;
+  animation: fadeInUp 1s ease-out;
   border-radius: 0.8rem;
   background: white;
   padding: 2rem;
   width: 100%;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .show {
@@ -108,6 +119,8 @@ main {
 
 main img {
   transition: all 0.4s ease-out;
+  opacity: 0;
+  animation: fadeInScale 0.6s ease-out forwards;
 }
 
 main img:hover {
@@ -115,7 +128,19 @@ main img:hover {
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 footer {
+  animation: fadeInUp 1s ease-out;
   font-weight: normal;
   display: grid;
 }
@@ -324,8 +349,6 @@ footer {
   }
 }
 
-/* DROPDOWN */
-
 /* Dropdown styles for desktop */
 .dropdown {
   position: relative;
@@ -348,8 +371,8 @@ footer {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #912020;
-  min-width: 160px;
+  min-width: 100px;
+  background-color: #f9f9f9;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 0.4rem;
@@ -357,16 +380,16 @@ footer {
 }
 
 .dropdown-content a {
-  color: white;
-  padding: 12px 16px;
+  color: black;
+  padding: 14px 18px;
   text-decoration: none;
   display: block;
-  text-align: left;
+  text-align: center;
   font-size: 0.8rem;
 }
 
 .dropdown-content a:hover {
-  background-color: #a12929;
+  color: #a12929;
 }
 
 .dropdown:hover .dropdown-content {
@@ -418,4 +441,50 @@ footer {
 .mobile-dropdown-content a.active {
   background-color: #f1f1f1;
   font-weight: bold;
+}
+
+/* Additional CSS for themes dropdown */
+.themes-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.themes-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 4px;
+  top: 100%;
+  left: 0;
+}
+
+.themes-dropdown .dropdown-content a {
+  color: black;
+  padding: 14px 18px;
+  text-decoration: none;
+  transition: all 0.3s ease-in;
+  text-align: center;
+  display: block;
+}
+
+.themes-dropdown .dropdown-content a:hover {
+  color: #912020;
+  background: #f1f1f1;
+}
+
+.themes-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.themes-dropdown .dropbtn {
+  background: inherit;
+  border: none;
+  color: #f9f9f9;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.8rem;
+  text-decoration: none;
 }

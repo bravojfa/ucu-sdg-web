@@ -1,4 +1,5 @@
 .sdg {
+  animation: fadeInUp 1s ease-out;
   display: grid;
   gap: 2rem;
 }
@@ -6,6 +7,17 @@
 .sdg section {
   display: grid;
   gap: 2rem;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .sdg section button {
@@ -42,6 +54,7 @@
   display: grid;
   margin-top: 1rem;
   border-radius: 0.4rem;
+  animation: fadeInUp 1s ease-out;
 }
 
 .content section {
@@ -214,6 +227,7 @@
   top: 0;
   height: 100%;
   width: 100%;
+  animation: fadeInUp 0.4s ease-out;
   background: rgba(0, 0, 0, 0.8);
   justify-content: center;
   align-items: center;
@@ -232,6 +246,7 @@
 }
 
 .pdf-content-wrapper {
+  animation: fadeInUp 1s ease-out;
   display: block;
   margin: auto;
   padding: 2rem;

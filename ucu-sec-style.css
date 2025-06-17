@@ -75,6 +75,7 @@ aside h1 {
   text-align: center;
   border-radius: 0.6rem;
   background: linear-gradient(rgba(0, 0, 0, 0.64), rgba(0, 0, 0, 0.64));
+  animation: fadeInUp 1s ease-out;
   transition: all 0.3s ease-out;
   letter-spacing: 0.2rem;
   font-size: 2.6rem;
@@ -83,6 +84,17 @@ aside h1 {
 
 aside h1:hover {
   transform: scale(1.05);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 aside section {
@@ -137,6 +149,7 @@ main {
   opacity: 0;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
   transform: translateX(-300px);
+  animation: fadeInUp 1s ease-out;
   transition: all 0.5s ease-out;
   border-radius: 0.4rem;
   object-fit: cover;
@@ -156,6 +169,7 @@ main {
   display: grid;
   line-height: 1.5;
   text-align: justify;
+  animation: fadeInUp 1s ease-out;
   padding-right: 1rem;
   padding-left: 1rem;
   gap: 2rem;

@@ -17,7 +17,7 @@ if (navigation) {
   navigation.innerHTML = "";
 }
 
-// Create the navigation content with dynamic year dropdown
+// Create the navigation content with dynamic year dropdown and themes dropdown
 function createNavigation() {
   // Available years for SDG content
   const availableYears = ["2023", "2024"];
@@ -30,6 +30,15 @@ function createNavigation() {
     )
     .join("");
 
+  // Create themes dropdown items HTML
+  const themesOptions = `
+    <a href="../themes/planet.html">Planet</a>
+    <a href="../themes/people.html">People</a>
+    <a href="../themes/prosperity.html">Prosperity</a>
+    <a href="../themes/peace.html">Peace</a>
+    <a href="../themes/partnerships.html">Partnerships</a>
+  `;
+
   // Create navigation content
   const navigationContent = document.createElement("section");
   navigationContent.innerHTML = `
@@ -41,10 +50,10 @@ function createNavigation() {
         <section class="desktop">
           <a href="../index.html">Home</a>
           <a href="../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-          <div class="themes-links">
-            <a href="javascript:void(0)" class="themepick">Themes</a>
+          <div class="themes-dropdown">
+            <button class="dropbtn">Themes ▼</button>
             <div class="dropdown-content">
-              ${yearOptions}
+              ${themesOptions}
             </div>
           </div>
           <a href="#">About</a>
@@ -64,10 +73,15 @@ function createNavigation() {
       <section class="links">
         <a href="../index.html">Home</a>
         <a href="../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-        <a href="#">Themes</a>
+        <div class="mobile-themes-dropdown">
+          <a href="#" class="dropdown-title">Themes ▼</a>
+          <div class="mobile-dropdown-content">
+            ${themesOptions}
+          </div>
+        </div>
         <a href="#">About</a>
         <div class="mobile-dropdown">
-          <button href="#" class="dropbtn">Select Year ▼</button>
+          <a href="#" class="dropdown-title">Select Year ▼</a>
           <div class="mobile-dropdown-content">
             ${yearOptions}
           </div>
@@ -116,20 +130,10 @@ document.addEventListener("DOMContentLoaded", () => {
         <img src="../images/sdg-logo.png" alt="Information" onerror="this.src='../images/sdg-logo.png'; this.style.opacity='0.4';">
       </div>
     `;
-
     // Insert after the divider section
-    const dividerSection = document.querySelector("no-project");
-    if (dividerSection) {
-      dividerSection.parentNode.insertBefore(
-        noProjectsIndicator,
-        dividerSection.nextSibling
-      );
-    } else {
-      // Fallback - add to main
-      const mainElement = document.querySelector("main");
-      if (mainElement) {
-        mainElement.appendChild(noProjectsIndicator);
-      }
+    const mainElement = document.querySelector("main");
+    if (mainElement) {
+      mainElement.appendChild(noProjectsIndicator);
     }
 
     // Initially hide it
@@ -140,24 +144,19 @@ document.addEventListener("DOMContentLoaded", () => {
   function displayContentForYear(selectedYear) {
     console.log("Displaying content for year:", selectedYear);
 
-    // Get all project sections
     const projectSections = document.querySelectorAll(".project");
-
-    // Check if any project has the data-year attribute
     const hasDataYearAttributes = Array.from(projectSections).some((section) =>
       section.hasAttribute("data-year")
     );
 
     let visibleProjects = 0;
 
-    // If no project has data-year attribute, show all projects
     if (!hasDataYearAttributes) {
       projectSections.forEach((section) => {
         section.style.display = "block"; // Show all projects
         visibleProjects++;
       });
     } else {
-      // Show only projects with matching data-year attribute
       projectSections.forEach((section) => {
         const projectYear = section.getAttribute("data-year");
         if (projectYear === selectedYear) {
@@ -169,7 +168,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Show or hide the no projects indicator
     const noProjectsIndicator = document.getElementById(
       "no-projects-indicator"
     );
@@ -182,48 +180,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Update dropdown button text
-    const dropbtn = document.querySelector(".dropbtn");
-    const dropdownTitle = document.querySelector(".dropdown-title");
+    const dropbtn = document.querySelectorAll(".dropbtn")[1]; // Second dropdown for year
+    const dropdownTitle = document.querySelector(
+      ".mobile-dropdown .dropdown-title"
+    );
 
     if (dropbtn) dropbtn.textContent = `${selectedYear} ▼`;
     if (dropdownTitle) dropdownTitle.textContent = `${selectedYear} ▼`;
 
-    // Store the selection in localStorage for persistence across page loads
     localStorage.setItem("selectedSDGYear", selectedYear);
   }
 
-  // Clear any previous event listeners by using delegated events
+  // Delegated event listener for year options
   document.addEventListener("click", function (e) {
-    // Check if clicked element is a year option
     if (e.target && e.target.classList.contains("year-option")) {
       e.preventDefault();
       const selectedYear = e.target.dataset.year;
       displayContentForYear(selectedYear);
 
-      // Close the mobile menu if it's open
       const menuLinks = document.querySelector(".links");
-      if (menuLinks && window.g.etComputedStyle(menuLinks).display === "grid") {
+      if (menuLinks && window.getComputedStyle(menuLinks).display === "grid") {
         menuLinks.style.display = "none";
       }
     }
   });
 
-  // Add click handler for mobile dropdown toggle
-  const mobileDropdownTitle = document.querySelector(".dropdown-title");
-  if (mobileDropdownTitle) {
-    mobileDropdownTitle.addEventListener("click", function (e) {
+  // Add click handler for mobile dropdown toggles
+  const mobileDropdownTitles = document.querySelectorAll(".dropdown-title");
+  mobileDropdownTitles.forEach((title) => {
+    title.addEventListener("click", function (e) {
       e.preventDefault();
       const mobileDropdown = this.parentElement;
       if (mobileDropdown) {
         mobileDropdown.classList.toggle("active");
       }
     });
-  }
+  });
 
-  // Initialize the display based on stored preference or default to the oldest year
   const storedYear = localStorage.getItem("selectedSDGYear");
-
-  // Use stored year if valid, otherwise use the oldest year
   const initialYear =
     storedYear && availableYears.includes(storedYear)
       ? storedYear
@@ -231,16 +225,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("Initial year:", initialYear);
 
-  // Initial display
   displayContentForYear(initialYear);
 });
 
-// PDF Viewer Script
+// PDF Viewer Script (remains unchanged)
 let pdfDoc = null,
   pageNum = 1,
   pageIsRendering = false,
   pageNumIsPending = null,
-  scale = 2.0; // Increased default scale for better readability
+  scale = 2.0;
 
 const canvas = document.querySelector("#pdf-render");
 const ctx = canvas.getContext("2d");
@@ -254,19 +247,13 @@ const zoomLevel = document.getElementById("zoom-level");
 
 function openModal(pdfUrl) {
   modal.style.display = "flex";
-
-  // Extract filename from URL to set as title
   const fileName = pdfUrl.split("/").pop();
   document.getElementById("pdf-title").textContent = fileName;
-
-  // Show loading indicator
   loadingIndicator.style.display = "block";
 
-  // Disable buttons until document is loaded
   prevButton.disabled = true;
   nextButton.disabled = true;
 
-  // Reset zoom level display
   updateZoomLevelDisplay();
 
   pdfjsLib
@@ -274,10 +261,7 @@ function openModal(pdfUrl) {
     .promise.then((pdfDoc_) => {
       pdfDoc = pdfDoc_;
       document.querySelector("#page-count").textContent = pdfDoc.numPages;
-
-      // Update button states
       updateNavButtons();
-
       renderPage(pageNum);
     })
     .catch((error) => {
@@ -301,8 +285,6 @@ function renderPage(num) {
 
   pdfDoc.getPage(num).then((page) => {
     const viewport = page.getViewport({ scale });
-
-    // Set canvas size dynamically
     canvas.width = viewport.width;
     canvas.height = viewport.height;
 
@@ -343,7 +325,6 @@ function updateZoomLevelDisplay() {
   zoomLevel.textContent = Math.round(scale * 50) + "%";
 }
 
-// Event listeners
 prevButton.addEventListener("click", () => {
   if (pageNum > 1) {
     pageNum--;
@@ -358,10 +339,8 @@ nextButton.addEventListener("click", () => {
   }
 });
 
-// Zoom controls
 zoomIn.addEventListener("click", () => {
   if (scale < 5) {
-    // Maximum zoom level
     scale += 0.25;
     updateZoomLevelDisplay();
     queueRenderPage(pageNum);
@@ -370,14 +349,12 @@ zoomIn.addEventListener("click", () => {
 
 zoomOut.addEventListener("click", () => {
   if (scale > 0.5) {
-    // Minimum zoom level
     scale -= 0.25;
     updateZoomLevelDisplay();
     queueRenderPage(pageNum);
   }
 });
 
-// Add keyboard navigation support
 document.addEventListener("keydown", (e) => {
   if (modal.style.display !== "flex") return;
 

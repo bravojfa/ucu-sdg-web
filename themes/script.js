@@ -17,8 +17,46 @@ if (navigation) {
   navigation.innerHTML = "";
 }
 
+// Function to get current page from URL
+function getCurrentPage() {
+  const path = window.location.pathname;
+  const filename = path.split("/").pop().replace(".html", "");
+  return filename;
+}
+
+// Create themes dropdown items HTML based on current page
+function createThemesOptions() {
+  const currentPage = getCurrentPage();
+  const themes = [
+    { key: "planet", label: "Planet", href: "planet.html" },
+    { key: "people", label: "People", href: "people.html" },
+    { key: "prosperity", label: "Prosperity", href: "prosperity.html" },
+    { key: "peace", label: "Peace", href: "peace.html" },
+    {
+      key: "partnerships",
+      label: "Partnerships",
+      href: "partnerships.html",
+    },
+  ];
+
+  return themes
+    .map((theme) => {
+      if (theme.key === currentPage) {
+        // Current page - make it non-clickable and styled differently
+        return `<span class="dropdown-current">${theme.label} (Current)</span>`;
+      } else {
+        // Other pages - normal clickable links
+        return `<a href="${theme.href}">${theme.label}</a>`;
+      }
+    })
+    .join("");
+}
+
 // Create the navigation content with dynamic year dropdown
 function createNavigation() {
+  const currentPage = getCurrentPage();
+  const themesOptions = createThemesOptions();
+
   // Create navigation content
   const navigationContent = document.createElement("section");
   navigationContent.innerHTML = `
@@ -30,8 +68,11 @@ function createNavigation() {
           <section class="desktop">
             <a href="../index.html">Home</a>
             <a href="../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-            <div class="themes-links">
-              <a href="javascript:void(0)" class="themepick">Themes</a>
+            <div class="themes-dropdown">
+              <button class="dropbtn">Themes ▼</button>
+              <div class="dropdown-content">
+                ${themesOptions}
+              </div>
             </div>
             <a href="#">About</a>
           </section>
@@ -44,7 +85,12 @@ function createNavigation() {
         <section class="links">
           <a href="../index.html">Home</a>
           <a href="../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-          <a href="#">Themes</a>
+          <div class="themes-dropdown">
+            <button class="dropbtn">Themes ▼</button>
+            <div class="dropdown-content">
+              ${themesOptions}
+            </div>
+          </div>
           <a href="#">About</a>
         </section>
     `;
@@ -57,7 +103,7 @@ function createNavigation() {
 // Make sure all DOM content is loaded before initializing
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize navigation
-  const availableYears = createNavigation();
+  createNavigation();
 
   let showMenu = document.querySelector(".mobile button");
   let menuLinks = document.querySelector(".links");
