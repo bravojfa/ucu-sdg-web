@@ -70,7 +70,7 @@ function createNavigation() {
         <section class="desktop">
           <a href="index.html">Home</a>
           <a href="ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-          <a href="#">Projects</a>
+          <a href="#">Themes</a>
           <a href="#">About</a>
           <div class="dropdown">
             <button class="dropbtn">Select Year ▼</button>
@@ -88,7 +88,7 @@ function createNavigation() {
       <section class="links">
         <a href="index.html">Home</a>
         <a href="ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-        <a href="#">Projects</a>
+        <a href="#">Themes</a>
         <a href="#">About</a>
         <div class="mobile-dropdown">
           <a href="#" class="dropdown-title">Select Year ▼</a>

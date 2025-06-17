@@ -41,7 +41,12 @@ function createNavigation() {
         <section class="desktop">
           <a href="../index.html">Home</a>
           <a href="../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-          <a href="#">Projects</a>
+          <div class="themes-links">
+            <a href="javascript:void(0)" class="themepick">Themes</a>
+            <div class="dropdown-content">
+              ${yearOptions}
+            </div>
+          </div>
           <a href="#">About</a>
           <div class="dropdown">
             <button class="dropbtn">Select Year ▼</button>
@@ -59,10 +64,10 @@ function createNavigation() {
       <section class="links">
         <a href="../index.html">Home</a>
         <a href="../ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
-        <a href="#">Projects</a>
+        <a href="#">Themes</a>
         <a href="#">About</a>
         <div class="mobile-dropdown">
-          <a href="#" class="dropdown-title">Select Year ▼</a>
+          <button href="#" class="dropbtn">Select Year ▼</button>
           <div class="mobile-dropdown-content">
             ${yearOptions}
           </div>
@@ -108,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     noProjectsIndicator.className = "no-projects-message";
     noProjectsIndicator.innerHTML = `
       <div class="message-content">
-        <img src="../images/info-icon.png" alt="Information" onerror="this.src='../images/sdg-logo.png'; this.style.opacity='0.4';">
+        <img src="../images/sdg-logo.png" alt="Information" onerror="this.src='../images/sdg-logo.png'; this.style.opacity='0.4';">
       </div>
     `;
 
@@ -197,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Close the mobile menu if it's open
       const menuLinks = document.querySelector(".links");
-      if (menuLinks && window.getComputedStyle(menuLinks).display === "grid") {
+      if (menuLinks && window.g.etComputedStyle(menuLinks).display === "grid") {
         menuLinks.style.display = "none";
       }
     }

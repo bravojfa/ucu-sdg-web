@@ -1,0 +1,75 @@
+#hero h1 {
+  color: white;
+  text-align: center;
+  border-radius: 0.6rem;
+  background: linear-gradient(rgba(0, 0, 0, 0.64), rgba(0, 0, 0, 0.64));
+  transition: all 0.3s ease-out;
+  letter-spacing: 0.2rem;
+  font-size: 2.6rem;
+  padding: 2.6rem;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.sdgs-container {
+  justify-items: center;
+  display: grid;
+  gap: 2rem;
+}
+
+.sdgs-container h2 {
+  color: #801515;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.sdgs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 2rem;
+  gap: 1.4rem;
+}
+
+.sdgs img {
+  width: 100%;
+  height: auto;
+}
+
+.content-container {
+  width: 90%;
+  margin: 20px auto;
+  padding-left: 20px;
+}
+
+.item {
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.content-title {
+  width: 100%;
+  padding: 14px;
+  font-weight: 500;
+  font-size: 1rem;
+  text-align: left;
+  color: #801515;
+  border: none;
+  cursor: pointer;
+}
+
+.item-content {
+  line-height: 1.5;
+  font-size: 0.9rem;
+  text-align: justify;
+  padding: 16px;
+  display: block; /* draft */
+}
+
+/*
+.item-content.active {
+  display: block;
+}
+  */
