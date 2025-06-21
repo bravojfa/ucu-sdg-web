@@ -77,7 +77,9 @@ function createNavigation() {
 
         <section class="desktop">
           <a href="index.html">Home</a>
-          <a href="ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
+          <a href="#">SDG Reports</a>
+          <a href="#">SDG Research</a>
+          <a href="ucu-smart-eco-campus.html">Smart Eco Campus</a>
           <div class="themes-dropdown">
             <button class="dropbtn">Themes ▼</button>
             <div class="dropdown-content">
@@ -92,7 +94,6 @@ function createNavigation() {
             </div>
           </div>
         </section>
-
         <section class="mobile">
           <button>menu</button>
         </section>
@@ -100,13 +101,20 @@ function createNavigation() {
 
       <section class="links">
         <a href="index.html">Home</a>
-        <a href="ucu-smart-eco-campus.html">UCU Smart Eco Campus</a>
         <div class="mobile-themes-dropdown">
           <a href="#" class="dropdown-title">Themes ▼</a>
           <div class="mobile-dropdown-content">
             ${themesOptions}
           </div>
+        </div><a href="#">SDG Reports</a>
+        <a href="#">SDG Research</a>
+        <div class="themes-dropdown">
+            <button class="dropbtn">Themes ▼</button>
+            <div class="dropdown-content">
+              ${themesOptions}
+            </div>
         </div>
+        <a href="ucu-smart-eco-campus.html">Smart Eco Campus</a>
         <a href="#">About</a>
         <div class="mobile-dropdown">
           <a href="#" class="dropdown-title">Select Year ▼</a>
