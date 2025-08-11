@@ -335,3 +335,62 @@
 .dropdown-content .dropdown-current:hover {
   background-color: #f1f1f1;
 }
+
+.article-container {
+  margin: auto;
+  max-width: 920px;
+}
+
+.article h2 {
+  padding: 2rem;
+  color: #801515;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 4px solid #a01d1d;
+  border-radius: 0.4rem;
+}
+
+.article h3 {
+  padding: 1rem 0rem;
+  color: #801515;
+}
+
+.article p {
+  line-height: 2;
+  text-align: justify;
+  margin-top: 1rem;
+}
+
+.article ol {
+  padding: 1rem;
+}
+
+.article li {
+  margin-top: 1rem;
+  line-height: 2;
+}
+
+.images img:hover {
+  transform: scale(1.01);
+}
+
+.images img {
+  transition: all 0.3s ease-in;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 0.4rem;
+  object-fit: cover;
+}
+
+.images {
+  display: grid;
+  margin-top: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.two-col {
+  display: grid;
+  margin-top: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+}

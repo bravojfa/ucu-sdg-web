@@ -39,8 +39,8 @@
 }
 
 .sdg img {
-  height: 320px;
-  width: 320px;
+  height: 300px;
+  width: 300px;
   margin: auto;
 }
 
@@ -57,35 +57,13 @@
   animation: fadeInUp 1s ease-out;
 }
 
-.content section {
+.file {
   display: grid;
-  line-height: 1.5;
-  text-align: justify;
-  align-content: space-between;
-  gap: 1rem;
+  align-items: center;
 }
 
-.content img {
-  height: 100%;
-  object-fit: fill;
-  object-position: top;
-}
-
-.content button {
-  padding: 0.6rem;
-  font-weight: bold;
-  text-align: center;
-  border-radius: 0.4rem;
-  transition: all 0.4s ease-out;
+.file a {
   text-decoration: none;
-  background: #292091;
-  color: white;
-  outline: none;
-  border: none;
-}
-
-.content button:hover {
-  transform: scale(1.04);
 }
 
 .divider h3 {
@@ -120,6 +98,33 @@
   transform: scale(1.04);
 }
 
+.content {
+  gap: 1rem;
+  display: grid;
+  padding: 1rem;
+}
+
+.content img {
+  object-fit: scale-down;
+}
+
+.text {
+  padding: 2rem;
+  border-radius: 0.4rem;
+  box-shadow: 4px 4px 10px #ede9e9, -4px -4px 10px rgb(243, 239, 239);
+  flex-direction: column;
+  text-align: justify;
+  line-height: 1.5;
+  display: flex;
+  gap: 2rem;
+}
+
+.images {
+  flex-direction: column;
+  display: flex;
+  gap: 1rem;
+}
+
 @media screen and (min-width: 300px) {
   .project h1 {
     font-size: 1.24rem;
@@ -131,23 +136,9 @@
     padding: 1rem;
   }
 
-  .right-img {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 2rem;
-  }
-
   .project h1 {
     font-size: 1.2rem;
     text-align: center;
-  }
-
-  .content {
-    padding: 1rem;
-  }
-
-  .content img {
-    height: auto;
   }
 
   .accomplishment {
@@ -185,22 +176,6 @@
     margin: 0px;
   }
 
-  .right-img {
-    display: grid;
-    align-items: start;
-    grid-template-columns: 1fr 46%;
-    padding: 2rem;
-    gap: 2rem;
-  }
-
-  .left-img {
-    display: grid;
-    align-items: start;
-    grid-template-columns: 46% 1fr;
-    padding: 2rem;
-    gap: 2rem;
-  }
-
   .divider h3 {
     text-align: center;
     font-size: 1.8rem;
@@ -213,12 +188,11 @@
     gap: 1rem;
   }
 
-  .content img {
-    height: 100%;
+  .content {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-/* Modal Styling */
 .modal {
   display: none;
   position: fixed;
@@ -524,4 +498,44 @@ canvas {
   .message-content p {
     font-size: 1rem;
   }
+
+  .right-img {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
+
+.article {
+  margin: auto;
+  max-width: 1000px;
+  padding: 0rem 2rem;
+}
+
+.article h1 {
+  margin-bottom: 2rem;
+}
+
+.article p {
+  text-align: justify;
+  line-height: 2.5;
+}
+
+.article ol {
+  padding: 1rem;
+}
+
+.article ol li {
+  line-height: 2.5;
+}
+
+.article h3 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  color: #801515;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
 }
