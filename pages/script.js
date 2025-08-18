@@ -20,7 +20,7 @@ if (navigation) {
 // Create the navigation content with dynamic year dropdown and themes dropdown
 function createNavigation() {
   // Available years for SDG content
-  const availableYears = ["2023", "2024"];
+  const availableYears = ["2023", "2024", "2025"];
 
   // Create year dropdown items HTML
   const yearOptions = availableYears
@@ -110,6 +110,44 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  const articlesContainer = document.getElementById("articles-container");
+  const noProjectsIndicator = document.getElementById("no-projects-indicator");
+  let allArticles = []; // Variable to store all articles after fetching
+
+  // --- NEW: Dynamically determine which JSON file to fetch ---
+  const sdgNumber = document.body.dataset.sdg; // Reads the 'data-sdg' attribute
+
+  if (!sdgNumber) {
+    console.error("The data-sdg attribute is missing from the <body> tag.");
+    return; // Stop if the attribute isn't set
+  }
+
+  // Construct the correct file path based on the SDG number
+  const jsonUrl = `sdg${sdgNumber}-articles.json`;
+
+  // Fetch the specific JSON file for the current page
+  fetch(jsonUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      allArticles = data;
+      const storedYear = localStorage.getItem("selectedSDGYear");
+      const initialYear =
+        storedYear && availableYears.includes(storedYear)
+          ? storedYear
+          : availableYears[0];
+
+      displayContentForYear(initialYear);
+    })
+    .catch((error) => {
+      console.error("Error fetching SDG articles:", error);
+      articlesContainer.innerHTML = `<p style="text-align: center;">Could not load the articles for SDG ${sdgNumber}. Please check the file path and JSON format.</p>`;
+    });
+
   let showMenu = document.querySelector(".mobile button");
   let menuLinks = document.querySelector(".links");
 
@@ -124,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Create no projects indicator element if it doesn't exist
-  let noProjectsIndicator = document.getElementById("no-projects-indicator");
   if (!noProjectsIndicator) {
     noProjectsIndicator = document.createElement("div");
     noProjectsIndicator.id = "no-projects-indicator";
@@ -144,63 +181,74 @@ document.addEventListener("DOMContentLoaded", () => {
     noProjectsIndicator.style.display = "none";
   }
 
-  // MODIFIED FUNCTION: Updated to show indicator when no projects are available for selected year
+  // --- MODIFIED FUNCTION: Renders articles instead of just showing/hiding them ---
   function displayContentForYear(selectedYear) {
-    console.log("Displaying content for year:", selectedYear);
+    // Clear the existing content
+    articlesContainer.innerHTML = "";
 
-    const projectSections = document.querySelectorAll(".project");
-    const hasDataYearAttributes = Array.from(projectSections).some((section) =>
-      section.hasAttribute("data-year")
+    // Filter articles for the selected year
+    const filteredArticles = allArticles.filter(
+      (article) => article.year === selectedYear
     );
 
-    let visibleProjects = 0;
-
-    if (!hasDataYearAttributes) {
-      projectSections.forEach((section) => {
-        section.style.display = "block"; // Show all projects
-        visibleProjects++;
-      });
+    if (filteredArticles.length === 0) {
+      noProjectsIndicator.style.display = "block";
     } else {
-      projectSections.forEach((section) => {
-        const projectYear = section.getAttribute("data-year");
-        if (projectYear === selectedYear) {
-          section.style.display = "block";
-          visibleProjects++;
-        } else {
-          section.style.display = "none";
-        }
+      noProjectsIndicator.style.display = "none";
+      filteredArticles.forEach((article) => {
+        // Create the HTML for each article dynamically
+        const articleElement = document.createElement("section");
+        articleElement.className = `project`;
+        articleElement.setAttribute("data-year", article.year);
+
+        // Generate paragraphs from the content array
+        const paragraphs = article.content.map((p) => `<p>${p}</p>`).join("");
+
+        articleElement.innerHTML = `
+          <h1>${article.title}</h1>
+          <section class="content ${article.layout}">
+            ${
+              article.layout === "left-img"
+                ? `<img src="${article.image}" alt="${article.title}" />`
+                : ""
+            }
+            <section class="text">
+              ${paragraphs}
+              <section class="file">
+                <button onclick="openModal('${article.documentUrl}')">
+                  READ FULL DOCUMENT
+                </button>
+              </section>
+            </section>
+            ${
+              article.layout === "right-img"
+                ? `<img src="${article.image}" alt="${article.title}" />`
+                : ""
+            }
+          </section>
+        `;
+        articlesContainer.appendChild(articleElement);
       });
     }
 
-    const noProjectsIndicator = document.getElementById(
-      "no-projects-indicator"
-    );
-    if (noProjectsIndicator) {
-      if (visibleProjects === 0) {
-        noProjectsIndicator.style.display = "block";
-      } else {
-        noProjectsIndicator.style.display = "none";
-      }
-    }
-
-    // Update dropdown button text
-    const dropbtn = document.querySelectorAll(".dropbtn")[1]; // Second dropdown for year
+    // Update the dropdown button text to show the selected year
+    const dropbtn = document.querySelectorAll(".dropbtn")[1];
     const dropdownTitle = document.querySelector(
       ".mobile-dropdown .dropdown-title"
     );
-
     if (dropbtn) dropbtn.textContent = `${selectedYear} ▼`;
     if (dropdownTitle) dropdownTitle.textContent = `${selectedYear} ▼`;
 
+    // Save the selected year to local storage
     localStorage.setItem("selectedSDGYear", selectedYear);
   }
 
-  // Delegated event listener for year options
+  // --- MODIFIED: Event listener for year selection ---
   document.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("year-option")) {
       e.preventDefault();
       const selectedYear = e.target.dataset.year;
-      displayContentForYear(selectedYear);
+      displayContentForYear(selectedYear); // Re-render content for the new year
 
       const menuLinks = document.querySelector(".links");
       if (menuLinks && window.getComputedStyle(menuLinks).display === "grid") {
