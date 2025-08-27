@@ -19,8 +19,8 @@ if (navigation) {
 
 // Create the navigation content with dynamic year dropdown and themes dropdown
 function createNavigation() {
-  // Available years for SDG content
-  const availableYears = ["2023", "2024", "2025"];
+  // Available years for SDG content - easily expandable for future years
+  const availableYears = ["2023", "2024"]; // Add new years here
 
   // Create year dropdown items HTML
   const yearOptions = availableYears
@@ -60,7 +60,7 @@ function createNavigation() {
           </div>
           <a href="#">About</a>
           <div class="dropdown">
-            <button class="dropbtn">Select Year ▼</button>
+            <button class="dropbtn year-dropdown-btn">Select Year ▼</button>
             <div class="dropdown-content">
               ${yearOptions}
             </div>
@@ -85,7 +85,7 @@ function createNavigation() {
         </div>
         <a href="#">About</a>
         <div class="mobile-dropdown">
-          <a href="#" class="dropdown-title">Select Year ▼</a>
+          <a href="#" class="dropdown-title mobile-year-dropdown">Select Year ▼</a>
           <div class="mobile-dropdown-content">
             ${yearOptions}
           </div>
@@ -112,42 +112,264 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const articlesContainer = document.getElementById("articles-container");
   const noProjectsIndicator = document.getElementById("no-projects-indicator");
-  let allArticles = []; // Variable to store all articles after fetching
+  let allData = {}; // Object to store data for all years
+  let currentSelectedYear = null; // Track current selected year
 
-  // --- NEW: Dynamically determine which JSON file to fetch ---
-  const sdgNumber = document.body.dataset.sdg; // Reads the 'data-sdg' attribute
+  // Get SDG number from body data attribute
+  const sdgNumber = document.body.dataset.sdg;
 
   if (!sdgNumber) {
     console.error("The data-sdg attribute is missing from the <body> tag.");
-    return; // Stop if the attribute isn't set
+    return;
   }
 
-  // Construct the correct file path based on the SDG number
-  const jsonUrl = `sdg${sdgNumber}-articles.json`;
+  // Function to fetch data for a specific year with better error handling
+  async function fetchYearData(year) {
+    const jsonUrl = `sdg${sdgNumber}-${year}.json`;
 
-  // Fetch the specific JSON file for the current page
-  fetch(jsonUrl)
-    .then((response) => {
+    try {
+      const response = await fetch(jsonUrl);
       if (!response.ok) {
+        // If file doesn't exist, return empty data instead of throwing error
+        if (response.status === 404) {
+          console.warn(`No data file found for year ${year}: ${jsonUrl}`);
+          return null;
+        }
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
-      return response.json();
-    })
-    .then((data) => {
-      allArticles = data;
-      const storedYear = localStorage.getItem("selectedSDGYear");
-      const initialYear =
-        storedYear && availableYears.includes(storedYear)
-          ? storedYear
-          : availableYears[0];
+      const data = await response.json();
+      allData[year] = data;
+      return data;
+    } catch (error) {
+      console.error(`Error fetching SDG articles for ${year}:`, error);
+      return null;
+    }
+  }
 
-      displayContentForYear(initialYear);
-    })
-    .catch((error) => {
-      console.error("Error fetching SDG articles:", error);
-      articlesContainer.innerHTML = `<p style="text-align: center;">Could not load the articles for SDG ${sdgNumber}. Please check the file path and JSON format.</p>`;
+  // Function to render 1st-style articles (array format)
+  function render1stLayout(articles) {
+    articles.forEach((article) => {
+      const articleElement = document.createElement("section");
+      articleElement.className = `project`;
+      articleElement.setAttribute("data-year", article.year);
+
+      const paragraphs = article.content.map((p) => `<p>${p}</p>`).join("");
+
+      articleElement.innerHTML = `
+        <h1>${article.title}</h1>
+        <section class="content ${article.layout}">
+          ${
+            article.layout === "left-img"
+              ? `<img src="${article.image}" alt="${article.title}" onerror="this.style.display='none'" />`
+              : ""
+          }
+          <section class="text">
+            ${paragraphs}
+            <section class="file">
+              <button onclick="openModal('${article.documentUrl}')">
+                READ FULL DOCUMENT
+              </button>
+            </section>
+          </section>
+          ${
+            article.layout === "right-img"
+              ? `<img src="${article.image}" alt="${article.title}" onerror="this.style.display='none'" />`
+              : ""
+          }
+        </section>
+      `;
+      articlesContainer.appendChild(articleElement);
     });
+  }
 
+  // Function to render 2024-style content (array of objects with sections format)
+  function render2ndLayout(dataArray) {
+    // Check if dataArray is actually an array
+    if (!Array.isArray(dataArray)) {
+      console.error("Expected array but got:", typeof dataArray);
+      return;
+    }
+
+    dataArray.forEach((data) => {
+      // Validate that each item has the expected structure
+      if (!data.sections || !Array.isArray(data.sections)) {
+        console.warn(
+          "Invalid data structure for item:",
+          data.title || "Unknown"
+        );
+        return;
+      }
+
+      const articleElement = document.createElement("section");
+      articleElement.className = `project`;
+      articleElement.setAttribute("data-year", data.year);
+
+      let sectionsHtml = "";
+
+      data.sections.forEach((section) => {
+        switch (section.type) {
+          case "intro_paragraph":
+            sectionsHtml += `<div class="intro-section">`;
+            section.content.forEach((paragraph) => {
+              sectionsHtml += `<p>${paragraph}</p>`;
+            });
+            sectionsHtml += `</div>`;
+            break;
+
+          case "aims_list":
+            sectionsHtml += `
+            <div class="aims-section">
+              <h3>${section.title}</h3>
+              <ul>
+                ${section.items.map((item) => `<li>${item}</li>`).join("")}
+              </ul>
+            </div>
+          `;
+            break;
+
+          case "standard_section":
+            sectionsHtml += `
+            <div class="standard-section">
+              <h3>${section.title}</h3>
+              ${section.content
+                .map((paragraph) => `<p>${paragraph}</p>`)
+                .join("")}
+            </div>
+          `;
+            break;
+
+          case "two_column":
+            sectionsHtml += `
+            <div class="two-column-section">
+              <div class="column-container">
+                ${section.columns
+                  .map(
+                    (column) => `
+                  <div class="column">
+                    <h4>${column.title}</h4>
+                    ${column.content
+                      .map((paragraph) => `<p>${paragraph}</p>`)
+                      .join("")}
+                  </div>
+                `
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `;
+            break;
+
+          default:
+            console.warn(`Unknown section type: ${section.type}`);
+        }
+      });
+
+      articleElement.innerHTML = `
+      <h1>${data.title}</h1>
+      <section class="content single-article">
+        <section class="text">
+          ${sectionsHtml}
+        </section>
+      </section>
+    `;
+
+      articlesContainer.appendChild(articleElement);
+    });
+  }
+
+  // Enhanced function to display content for a selected year with better loading states
+  async function displayContentForYear(selectedYear) {
+    // Show loading state
+    articlesContainer.innerHTML =
+      '<div class="loading-content">Loading content for ' +
+      selectedYear +
+      "...</div>";
+    noProjectsIndicator.style.display = "none";
+
+    // Update current selected year
+    currentSelectedYear = selectedYear;
+
+    // Check if we already have the data for this year
+    let yearData = allData[selectedYear];
+
+    // If we don't have the data, fetch it
+    if (!yearData) {
+      yearData = await fetchYearData(selectedYear);
+    }
+
+    // Clear loading state
+    articlesContainer.innerHTML = "";
+
+    // Check if we have any content for this year
+    if (!yearData) {
+      noProjectsIndicator.style.display = "block";
+      updateDropdownText(selectedYear);
+      return;
+    }
+
+    const hasContent = Array.isArray(yearData)
+      ? yearData.length > 0
+      : yearData.sections && yearData.sections.length > 0;
+
+    if (!hasContent) {
+      noProjectsIndicator.style.display = "block";
+    } else {
+      noProjectsIndicator.style.display = "none";
+
+      // Render content based on data structure
+      try {
+        if (Array.isArray(yearData)) {
+          // Check if it's 2023-style (simple objects) or 2024-style (objects with sections)
+          if (yearData.length > 0 && yearData[0].sections) {
+            // 2024-style data (array of objects with sections)
+            render2ndLayout(yearData);
+          } else {
+            // 2023-style data (array of simple articles)
+            render1stLayout(yearData);
+          }
+        } else {
+          console.warn(`Unknown data structure for year ${selectedYear}`);
+          noProjectsIndicator.style.display = "block";
+        }
+      } catch (error) {
+        console.error(
+          `Error rendering content for year ${selectedYear}:`,
+          error
+        );
+        noProjectsIndicator.style.display = "block";
+      }
+    }
+
+    updateDropdownText(selectedYear);
+    // Save the selected year to localStorage with SDG-specific key
+    localStorage.setItem(`selectedSDGYear_${sdgNumber}`, selectedYear);
+  }
+
+  // Enhanced helper function to update dropdown button text
+  function updateDropdownText(selectedYear) {
+    // Update desktop dropdown
+    const desktopDropbtn = document.querySelector(".year-dropdown-btn");
+    if (desktopDropbtn) {
+      desktopDropbtn.textContent = `${selectedYear} ▼`;
+    }
+
+    // Update mobile dropdown
+    const mobileDropdownTitle = document.querySelector(".mobile-year-dropdown");
+    if (mobileDropdownTitle) {
+      mobileDropdownTitle.textContent = `${selectedYear} ▼`;
+    }
+
+    // Update visual state of year options
+    document.querySelectorAll(".year-option").forEach((option) => {
+      if (option.dataset.year === selectedYear) {
+        option.classList.add("active");
+      } else {
+        option.classList.remove("active");
+      }
+    });
+  }
+
+  // Enhanced mobile menu functionality
   let showMenu = document.querySelector(".mobile button");
   let menuLinks = document.querySelector(".links");
 
@@ -161,126 +383,101 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // Create no projects indicator element if it doesn't exist
-  if (!noProjectsIndicator) {
-    noProjectsIndicator = document.createElement("div");
-    noProjectsIndicator.id = "no-projects-indicator";
-    noProjectsIndicator.className = "no-projects-message";
-    noProjectsIndicator.innerHTML = `
-      <div class="message-content">
-        <img src="../images/sdg-logo.png" alt="Information" onerror="this.src='../images/sdg-logo.png'; this.style.opacity='0.4';">
-      </div>
-    `;
-    // Insert after the divider section
-    const mainElement = document.querySelector("main");
-    if (mainElement) {
-      mainElement.appendChild(noProjectsIndicator);
-    }
+  // Create or update no projects indicator element
+  function ensureNoProjectsIndicator() {
+    let indicator = document.getElementById("no-projects-indicator");
+    if (!indicator) {
+      const newNoProjectsIndicator = document.createElement("div");
+      newNoProjectsIndicator.id = "no-projects-indicator";
+      newNoProjectsIndicator.className = "no-projects-message";
+      newNoProjectsIndicator.innerHTML = `
+        <div class="message-content">
+          <img src="../images/sdg-logo.png" alt="Information" onerror="this.style.opacity='0.4';">
+          <p style="text-transform: uppercase">
+            No projects found for the selected year.
+          </p>
+        </div>
+      `;
 
-    // Initially hide it
-    noProjectsIndicator.style.display = "none";
+      const mainElement = document.querySelector("main");
+      if (mainElement) {
+        mainElement.appendChild(newNoProjectsIndicator);
+      }
+      newNoProjectsIndicator.style.display = "none";
+      return newNoProjectsIndicator;
+    }
+    return indicator;
   }
 
-  // --- MODIFIED FUNCTION: Renders articles instead of just showing/hiding them ---
-  function displayContentForYear(selectedYear) {
-    // Clear the existing content
-    articlesContainer.innerHTML = "";
+  // Ensure no projects indicator exists
+  ensureNoProjectsIndicator();
 
-    // Filter articles for the selected year
-    const filteredArticles = allArticles.filter(
-      (article) => article.year === selectedYear
-    );
-
-    if (filteredArticles.length === 0) {
-      noProjectsIndicator.style.display = "block";
-    } else {
-      noProjectsIndicator.style.display = "none";
-      filteredArticles.forEach((article) => {
-        // Create the HTML for each article dynamically
-        const articleElement = document.createElement("section");
-        articleElement.className = `project`;
-        articleElement.setAttribute("data-year", article.year);
-
-        // Generate paragraphs from the content array
-        const paragraphs = article.content.map((p) => `<p>${p}</p>`).join("");
-
-        articleElement.innerHTML = `
-          <h1>${article.title}</h1>
-          <section class="content ${article.layout}">
-            ${
-              article.layout === "left-img"
-                ? `<img src="${article.image}" alt="${article.title}" />`
-                : ""
-            }
-            <section class="text">
-              ${paragraphs}
-              <section class="file">
-                <button onclick="openModal('${article.documentUrl}')">
-                  READ FULL DOCUMENT
-                </button>
-              </section>
-            </section>
-            ${
-              article.layout === "right-img"
-                ? `<img src="${article.image}" alt="${article.title}" />`
-                : ""
-            }
-          </section>
-        `;
-        articlesContainer.appendChild(articleElement);
-      });
-    }
-
-    // Update the dropdown button text to show the selected year
-    const dropbtn = document.querySelectorAll(".dropbtn")[1];
-    const dropdownTitle = document.querySelector(
-      ".mobile-dropdown .dropdown-title"
-    );
-    if (dropbtn) dropbtn.textContent = `${selectedYear} ▼`;
-    if (dropdownTitle) dropdownTitle.textContent = `${selectedYear} ▼`;
-
-    // Save the selected year to local storage
-    localStorage.setItem("selectedSDGYear", selectedYear);
-  }
-
-  // --- MODIFIED: Event listener for year selection ---
+  // Enhanced event listener for year selection with better event delegation
   document.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("year-option")) {
       e.preventDefault();
       const selectedYear = e.target.dataset.year;
-      displayContentForYear(selectedYear); // Re-render content for the new year
 
+      // Only change if it's a different year
+      if (selectedYear !== currentSelectedYear) {
+        displayContentForYear(selectedYear);
+      }
+
+      // Close mobile menu if open
       const menuLinks = document.querySelector(".links");
       if (menuLinks && window.getComputedStyle(menuLinks).display === "grid") {
         menuLinks.style.display = "none";
       }
+
+      // Close mobile dropdown if open
+      const mobileDropdown = document.querySelector(".mobile-dropdown");
+      if (mobileDropdown && mobileDropdown.classList.contains("active")) {
+        mobileDropdown.classList.remove("active");
+      }
     }
   });
 
-  // Add click handler for mobile dropdown toggles
-  const mobileDropdownTitles = document.querySelectorAll(".dropdown-title");
-  mobileDropdownTitles.forEach((title) => {
-    title.addEventListener("click", function (e) {
+  // Enhanced mobile dropdown toggle functionality
+  document.addEventListener("click", function (e) {
+    if (e.target && e.target.classList.contains("mobile-year-dropdown")) {
       e.preventDefault();
-      const mobileDropdown = this.parentElement;
+      const mobileDropdown = e.target.parentElement;
       if (mobileDropdown) {
         mobileDropdown.classList.toggle("active");
       }
-    });
+    }
   });
 
-  const storedYear = localStorage.getItem("selectedSDGYear");
-  const initialYear =
-    storedYear && availableYears.includes(storedYear)
-      ? storedYear
-      : availableYears[0];
+  // Close dropdowns when clicking outside
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".mobile-dropdown")) {
+      document.querySelectorAll(".mobile-dropdown").forEach((dropdown) => {
+        dropdown.classList.remove("active");
+      });
+    }
+  });
 
-  console.log("Initial year:", initialYear);
+  // Initialize with stored year or default to most recent available year
+  function initializeYear() {
+    const storedYear = localStorage.getItem(`selectedSDGYear_${sdgNumber}`);
+    let initialYear;
 
-  displayContentForYear(initialYear);
+    if (storedYear && availableYears.includes(storedYear)) {
+      initialYear = storedYear;
+    } else {
+      // Default to the most recent year (last in array)
+      initialYear = availableYears[availableYears.length - 1];
+    }
+
+    console.log("Initializing with year:", initialYear);
+    displayContentForYear(initialYear);
+  }
+
+  // Start the application
+  initializeYear();
 });
 
-// PDF Viewer Script (remains unchanged)
+// Enhanced PDF Viewer Script with better error handling
 let pdfDoc = null,
   pageNum = 1,
   pageIsRendering = false,
@@ -288,7 +485,7 @@ let pdfDoc = null,
   scale = 2.0;
 
 const canvas = document.querySelector("#pdf-render");
-const ctx = canvas.getContext("2d");
+const ctx = canvas ? canvas.getContext("2d") : null;
 const modal = document.getElementById("pdfModal");
 const loadingIndicator = document.getElementById("loading-indicator");
 const prevButton = document.getElementById("prev");
@@ -298,13 +495,21 @@ const zoomOut = document.getElementById("zoom-out");
 const zoomLevel = document.getElementById("zoom-level");
 
 function openModal(pdfUrl) {
+  if (!modal) return;
+
   modal.style.display = "flex";
   const fileName = pdfUrl.split("/").pop();
-  document.getElementById("pdf-title").textContent = fileName;
-  loadingIndicator.style.display = "block";
+  const titleElement = document.getElementById("pdf-title");
+  if (titleElement) {
+    titleElement.textContent = fileName;
+  }
 
-  prevButton.disabled = true;
-  nextButton.disabled = true;
+  if (loadingIndicator) {
+    loadingIndicator.style.display = "block";
+  }
+
+  if (prevButton) prevButton.disabled = true;
+  if (nextButton) nextButton.disabled = true;
 
   updateZoomLevelDisplay();
 
@@ -312,28 +517,42 @@ function openModal(pdfUrl) {
     .getDocument(pdfUrl)
     .promise.then((pdfDoc_) => {
       pdfDoc = pdfDoc_;
-      document.querySelector("#page-count").textContent = pdfDoc.numPages;
+      const pageCountElement = document.querySelector("#page-count");
+      if (pageCountElement) {
+        pageCountElement.textContent = pdfDoc.numPages;
+      }
       updateNavButtons();
       renderPage(pageNum);
     })
     .catch((error) => {
       console.error("Error loading PDF:", error);
-      loadingIndicator.style.display = "none";
+      if (loadingIndicator) {
+        loadingIndicator.style.display = "none";
+      }
       alert("Failed to load the PDF document. Please try again later.");
     });
 }
 
 function closeModal() {
+  if (!modal) return;
+
   modal.style.display = "none";
   pdfDoc = null;
   pageNum = 1;
-  document.querySelector("#page-num").textContent = "0";
-  document.querySelector("#page-count").textContent = "0";
+
+  const pageNumElement = document.querySelector("#page-num");
+  const pageCountElement = document.querySelector("#page-count");
+  if (pageNumElement) pageNumElement.textContent = "0";
+  if (pageCountElement) pageCountElement.textContent = "0";
 }
 
 function renderPage(num) {
+  if (!pdfDoc || !canvas || !ctx) return;
+
   pageIsRendering = true;
-  loadingIndicator.style.display = "block";
+  if (loadingIndicator) {
+    loadingIndicator.style.display = "block";
+  }
 
   pdfDoc.getPage(num).then((page) => {
     const viewport = page.getViewport({ scale });
@@ -345,7 +564,9 @@ function renderPage(num) {
 
     renderTask.promise.then(() => {
       pageIsRendering = false;
-      loadingIndicator.style.display = "none";
+      if (loadingIndicator) {
+        loadingIndicator.style.display = "none";
+      }
 
       if (pageNumIsPending !== null) {
         renderPage(pageNumIsPending);
@@ -354,15 +575,18 @@ function renderPage(num) {
     });
   });
 
-  document.querySelector("#page-num").textContent = num;
+  const pageNumElement = document.querySelector("#page-num");
+  if (pageNumElement) {
+    pageNumElement.textContent = num;
+  }
   updateNavButtons();
 }
 
 function updateNavButtons() {
   if (!pdfDoc) return;
 
-  prevButton.disabled = pageNum <= 1;
-  nextButton.disabled = pageNum >= pdfDoc.numPages;
+  if (prevButton) prevButton.disabled = pageNum <= 1;
+  if (nextButton) nextButton.disabled = pageNum >= pdfDoc.numPages;
 }
 
 function queueRenderPage(num) {
@@ -374,51 +598,63 @@ function queueRenderPage(num) {
 }
 
 function updateZoomLevelDisplay() {
-  zoomLevel.textContent = Math.round(scale * 50) + "%";
+  if (zoomLevel) {
+    zoomLevel.textContent = Math.round(scale * 50) + "%";
+  }
 }
 
-prevButton.addEventListener("click", () => {
-  if (pageNum > 1) {
-    pageNum--;
-    queueRenderPage(pageNum);
-  }
-});
+// PDF control event listeners
+if (prevButton) {
+  prevButton.addEventListener("click", () => {
+    if (pageNum > 1) {
+      pageNum--;
+      queueRenderPage(pageNum);
+    }
+  });
+}
 
-nextButton.addEventListener("click", () => {
-  if (pageNum < pdfDoc.numPages) {
-    pageNum++;
-    queueRenderPage(pageNum);
-  }
-});
+if (nextButton) {
+  nextButton.addEventListener("click", () => {
+    if (pageNum < pdfDoc.numPages) {
+      pageNum++;
+      queueRenderPage(pageNum);
+    }
+  });
+}
 
-zoomIn.addEventListener("click", () => {
-  if (scale < 5) {
-    scale += 0.25;
-    updateZoomLevelDisplay();
-    queueRenderPage(pageNum);
-  }
-});
+if (zoomIn) {
+  zoomIn.addEventListener("click", () => {
+    if (scale < 5) {
+      scale += 0.25;
+      updateZoomLevelDisplay();
+      queueRenderPage(pageNum);
+    }
+  });
+}
 
-zoomOut.addEventListener("click", () => {
-  if (scale > 0.5) {
-    scale -= 0.25;
-    updateZoomLevelDisplay();
-    queueRenderPage(pageNum);
-  }
-});
+if (zoomOut) {
+  zoomOut.addEventListener("click", () => {
+    if (scale > 0.5) {
+      scale -= 0.25;
+      updateZoomLevelDisplay();
+      queueRenderPage(pageNum);
+    }
+  });
+}
 
+// Keyboard shortcuts for PDF viewer
 document.addEventListener("keydown", (e) => {
-  if (modal.style.display !== "flex") return;
+  if (!modal || modal.style.display !== "flex") return;
 
-  if (e.key === "ArrowLeft" && !prevButton.disabled) {
+  if (e.key === "ArrowLeft" && prevButton && !prevButton.disabled) {
     prevButton.click();
-  } else if (e.key === "ArrowRight" && !nextButton.disabled) {
+  } else if (e.key === "ArrowRight" && nextButton && !nextButton.disabled) {
     nextButton.click();
   } else if (e.key === "Escape") {
     closeModal();
   } else if (e.key === "+" || e.key === "=") {
-    zoomIn.click();
+    if (zoomIn) zoomIn.click();
   } else if (e.key === "-") {
-    zoomOut.click();
+    if (zoomOut) zoomOut.click();
   }
 });

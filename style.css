@@ -492,8 +492,8 @@ footer {
 .content button {
   display: grid;
   transition: all 0.3s ease-in;
-  box-shadow: 1px 2px 3px #143670;
-  background-color: #1a4282;
+  box-shadow: 1px 2px 3px #24a359;
+  background-color: #27ae60;
   border-radius: 0.6rem;
   color: #f9f9f9;
   border: none;
