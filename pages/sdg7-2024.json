@@ -1,0 +1,48 @@
+[
+  {
+    "year": "2024",
+    "title": "Presentation UI GreenMetrics",
+    "sections": [
+      {
+        "type": "intro_paragraph",
+        "content": [
+          "The UI GreenMetric World University Rankings evaluate universities worldwide based on their environmental sustainability efforts and green campus initiatives. This ranking system emphasizes critical indicators such as setting and infrastructure, energy and climate change, waste management, water conservation, transportation, and education and research.",
+          "In light of the university’s ongoing efforts to improve its performance in the UI GreenMetric ranking, a presentation session was held with Atty. Diga, who provided expert insights and critical feedback. His recommendations helped identify actionable areas for improvement and reinforced the university’s commitment to sustainable campus development."
+        ]
+      },
+      {
+        "type": "aims_list",
+        "title": "This projects aims to:",
+        "items": [
+          "Solicit expert feedback and recommendations from Atty. Diga to strengthen the university’s green practices and improve reporting mechanisms.",
+          "Identify gaps and opportunities for enhancing performance across the six UI GreenMetric categories to enable targeted improvements.",
+          "Foster institutional dialogue and collaboration among various stakeholders involved in sustainability and campus operations."
+        ]
+      },
+      {
+        "type": "standard_section",
+        "title": "Contributions to the Sustainable Development Goals",
+        "content": [
+          "The presentation and the ensuing discussion significantly contributed to the advancement of several United Nations Sustainable Development Goals (SDGs). It supported SDG 11: Sustainable Cities and Communities by promoting sustainable infrastructure development and thoughtful campus planning. The activity encouraged responsible resource use aligned with SDG 12: Responsible Consumption and Production, fostering more sustainable management practices. Efforts to reduce carbon emissions and improve energy efficiency directly supported SDG 13: Climate Action. Additionally, the focus on water conservation helped advance SDG 6: Clean Water and Sanitation. By integrating environmental education and research, the activity also contributed to SDG 4: Quality Education. Finally, the engagement fostered greater collaboration and partnership-building, reinforcing SDG 17: Partnerships for the Goals through inter-agency cooperation and expert involvement."
+        ]
+      },
+      {
+        "type": "two_column",
+        "columns": [
+          {
+            "title": "General Assessment",
+            "content": [
+              "The session with Atty. Diga proved to be highly constructive and impactful, offering invaluable insights that enriched the university’s approach to sustainability. His expertise provided a valuable external perspective that helped illuminate both the strategic vision and the practical, operational aspects of the university’s ongoing sustainability efforts. Through the open exchange of ideas, the session fostered a collaborative atmosphere that encouraged various departments and units to take a more proactive and coordinated role in advancing green practices across the campus. This collaborative environment not only inspired renewed enthusiasm but also helped build a shared sense of responsibility toward achieving the university’s sustainability goals. Additionally, the engagement significantly strengthened internal awareness regarding the importance and relevance of the UI GreenMetric framework as a benchmark for environmental performance. By highlighting key areas for improvement and best practices, the session set the stage for more targeted, measurable, and effective sustainability initiatives moving forward, ultimately positioning the university to enhance its green credentials and contribute more meaningfully to global environmental objectives."
+            ]
+          },
+          {
+            "title": "Recommendations",
+            "content": [
+              "To further strengthen the university’s performance in global impact rankings and advance its commitment to the Sustainable Development Goals (SDGs), it is essential to establish an SDG Monitoring Committee responsible for collecting, validating, and reporting relevant data. This committee will ensure accuracy and consistency in data management while serving as a central hub for SDG-related information. Additionally, conducting internal workshops for both academic and administrative units will be crucial to disseminate the knowledge gained from training sessions and to align efforts across the entire university. Developing a comprehensive SDG-aligned strategic plan that incorporates measurable indicators will provide a clear roadmap for impact ranking participation and institutional sustainability goals. Enhancing inter-departmental coordination is also necessary to facilitate comprehensive and accurate data submission, fostering collaboration and shared responsibility. Finally, investing in digital tools tailored to support data management and reporting will enable the university to efficiently track progress and meet international ranking standards, ensuring a more effective and transparent approach to sustainability performance."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

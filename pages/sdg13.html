@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css" />
     <title>UCU Sustainable Development Goals</title>
   </head>
-  <body>
+  <body data-sdg="13">
     <section class="navigation"></section>
 
     <aside id="hero">
@@ -35,7 +35,21 @@
           climate change.
         </p>
       </section>
-      <hr />
+
+      <div id="articles-container"></div>
+
+      <div
+        id="no-projects-indicator"
+        class="no-projects-message"
+        style="display: none"
+      >
+        <div class="message-content">
+          <img src="../images/sdg-logo.png" alt="Information" />
+          <p style="text-transform: uppercase">
+            No projects found for the selected year.
+          </p>
+        </div>
+      </div>
     </main>
 
     <footer>
