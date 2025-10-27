@@ -289,11 +289,11 @@
   #hero h1 {
     font-size: 2rem;
   }
-
+  /*
   .container {
     padding: 0 1rem;
   }
-
+*/
   .sdgs {
     grid-template-columns: repeat(2, 1fr);
   }

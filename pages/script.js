@@ -20,7 +20,7 @@ if (navigation) {
 // Create the navigation content with dynamic year dropdown and themes dropdown
 function createNavigation() {
   // Available years for SDG content - easily expandable for future years
-  const availableYears = ["2023", "2024"]; // Add new years here
+  const availableYears = ["2023", "2024", "2025"]; // Add new years here
 
   // Create year dropdown items HTML
   const yearOptions = availableYears
@@ -58,7 +58,7 @@ function createNavigation() {
               ${themesOptions}
             </div>
           </div>
-          <a href="#">About</a>
+          <a href="#">News</a>
           <div class="dropdown">
             <button class="dropbtn year-dropdown-btn">Select Year ▼</button>
             <div class="dropdown-content">
@@ -83,7 +83,7 @@ function createNavigation() {
               ${themesOptions}
             </div>
         </div>
-        <a href="#">About</a>
+        <a href="#">News</a>
         <div class="mobile-dropdown">
           <a href="#" class="dropdown-title mobile-year-dropdown">Select Year ▼</a>
           <div class="mobile-dropdown-content">

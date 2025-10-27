@@ -417,16 +417,17 @@ footer {
 .mobile-dropdown-content {
   display: none;
   background-color: #801515;
+  margin-top: 1rem;
   padding-left: 1rem;
+  border-radius: 0.4rem;
 }
 
 .mobile-dropdown-content a {
-  border-left: 2px solid white;
-  padding-left: 1rem !important;
+  text-align: center;
 }
 
-.mobile-dropdown.active .mobile-dropdown-content {
-  display: block;
+.mobile-themes-dropdown.active .mobile-dropdown-content {
+  display: grid;
 }
 
 /* Initially hide all year-specific SDG sections except the default one */

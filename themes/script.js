@@ -76,7 +76,7 @@ function createNavigation() {
                   ${themesOptions}
                 </div>
             </div>
-            <a href="#">About</a>
+            <a href="#">News</a>
           </section>
           <section class="mobile">
             <button>menu</button>
@@ -94,7 +94,7 @@ function createNavigation() {
               ${themesOptions}
             </div>
           </div>
-          <a href="#">About</a>
+          <a href="#">News</a>
         </section>
     `;
 

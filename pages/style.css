@@ -541,8 +541,6 @@ canvas {
   gap: 4rem;
 }
 
-/* Enhanced styles for render2ndLayout (2024 data format) */
-
 /* Single article container for 2024 layout */
 .content.single-article {
   grid-template-columns: 1fr;
