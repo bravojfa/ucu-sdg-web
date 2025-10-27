@@ -71,7 +71,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  max-width: 500px;
 }
 
 .sdgs img a {
@@ -245,6 +244,7 @@
 }
 
 .item-content.active {
+  overflow-y: scroll;
   max-height: 800px;
   opacity: 1;
   padding: 2rem;
@@ -311,7 +311,7 @@
 @media (max-width: 480px) {
   .sdgs {
     grid-template-columns: 1fr;
-    max-width: 200px;
+    width: 100%;
   }
 
   .content-title {

@@ -55,15 +55,16 @@ function createNavigation() {
 
       <section class="links">
         <a href="index.html">Home</a>
+        </div>
+        <a href="#">SDG Reports</a>
+        <a href="#">SDG Research</a>
+        <a href="ucu-smart-eco-campus.html">Smart Eco Campus</a>
         <div class="mobile-themes-dropdown">
           <a href="#" class="dropdown-title">Themes ▼</a>
           <div class="mobile-dropdown-content">
             ${themesOptions}
           </div>
         </div>
-        <a href="#">SDG Reports</a>
-        <a href="#">SDG Research</a>
-        <a href="ucu-smart-eco-campus.html">Smart Eco Campus</a>
         <a href="#">News</a>
       </section>
   `;

@@ -78,24 +78,7 @@ function createNavigation() {
             </div>
             <a href="#">News</a>
           </section>
-          <section class="mobile">
-            <button>menu</button>
-          </section>
         </header>
-  
-        <section class="links">
-          <a href="../index.html">Home</a>
-          <a href="#">SDG Reports</a>
-          <a href="#">SDG Research</a>
-          <a href="../ucu-smart-eco-campus.html">Smart Eco Campus</a>
-          <div class="themes-dropdown">
-            <button class="dropbtn">Themes ▼</button>
-            <div class="dropdown-content">
-              ${themesOptions}
-            </div>
-          </div>
-          <a href="#">News</a>
-        </section>
     `;
 
   if (navigation) {
