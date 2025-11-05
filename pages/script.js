@@ -20,7 +20,7 @@ if (navigation) {
 // Create the navigation content with dynamic year dropdown and themes dropdown
 function createNavigation() {
   // Available years for SDG content - easily expandable for future years
-  const availableYears = ["2023", "2024", "2025"]; // Add new years here
+  const availableYears = ["2023", "2024", "2025", "2026"]; // Add new years here
 
   // Create year dropdown items HTML
   const yearOptions = availableYears
@@ -50,7 +50,7 @@ function createNavigation() {
         <section class="desktop">
           <a href="../index.html">Home</a>
           <a href="#">SDG Reports</a>
-          <a href="#">SDG Research</a>
+          <a href="../sdg-research/index.html">SDG Research</a>
           <a href="../ucu-smart-eco-campus.html">Smart Eco Campus</a>
           <div class="themes-dropdown">
             <button class="dropbtn">Themes ▼</button>
@@ -75,7 +75,7 @@ function createNavigation() {
       <section class="links">
         <a href="../index.html">Home</a>
         <a href="#">SDG Reports</a>
-        <a href="#">SDG Research</a>
+        <a href="../sdg-research/index.html">SDG Research</a>
         <a href="../ucu-smart-eco-campus.html">Smart Eco Campus</a>
         <div class="themes-dropdown">
             <button class="dropbtn">Themes ▼</button>
@@ -163,12 +163,14 @@ document.addEventListener("DOMContentLoaded", () => {
               ? `<img src="${article.image}" alt="${article.title}" onerror="this.style.display='none'" />`
               : ""
           }
-          <section class="text">
-            ${paragraphs}
-            <section class="file">
-              <button onclick="openModal('${article.documentUrl}')">
-                READ FULL DOCUMENT
-              </button>
+          <section>
+            <section class="text">
+              ${paragraphs}
+              <section class="file">
+                <button onclick="openModal('${article.documentUrl}')">
+                  READ FULL DOCUMENT
+                </button>
+              </section>
             </section>
           </section>
           ${
@@ -311,21 +313,26 @@ document.addEventListener("DOMContentLoaded", () => {
       ? yearData.length > 0
       : yearData.sections && yearData.sections.length > 0;
 
+    // Around line 180 in your script.js
     if (!hasContent) {
       noProjectsIndicator.style.display = "block";
     } else {
       noProjectsIndicator.style.display = "none";
 
-      // Render content based on data structure
       try {
         if (Array.isArray(yearData)) {
-          // Check if it's 2023-style (simple objects) or 2024-style (objects with sections)
-          if (yearData.length > 0 && yearData[0].sections) {
-            // 2024-style data (array of objects with sections)
-            render2ndLayout(yearData);
-          } else {
-            // 2023-style data (array of simple articles)
-            render1stLayout(yearData);
+          // Separate items by type
+          const sectionsFormatItems = yearData.filter((item) => item.sections);
+          const simpleFormatItems = yearData.filter((item) => !item.sections);
+
+          // Render 2024-style items (with sections)
+          if (sectionsFormatItems.length > 0) {
+            render2ndLayout(sectionsFormatItems);
+          }
+
+          // Render 2023-style items (simple format)
+          if (simpleFormatItems.length > 0) {
+            render1stLayout(simpleFormatItems);
           }
         } else {
           console.warn(`Unknown data structure for year ${selectedYear}`);
@@ -340,9 +347,48 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    await updateSDGReportLink(selectedYear);
     updateDropdownText(selectedYear);
     // Save the selected year to localStorage with SDG-specific key
     localStorage.setItem(`selectedSDGYear_${sdgNumber}`, selectedYear);
+  }
+
+  // === SDG REPORT PDF HANDLER ===
+  const sdgReportButton = document.getElementById("sdg-report-btn");
+
+  // Helper: Check if PDF exists before opening
+  async function checkFileExists(url) {
+    try {
+      const response = await fetch(url, { method: "HEAD" });
+      return response.ok;
+    } catch (error) {
+      console.error("Error checking file:", error);
+      return false;
+    }
+  }
+
+  // Update PDF link whenever the year changes
+  async function updateSDGReportLink(selectedYear) {
+    if (!sdgReportButton) return;
+
+    // Construct PDF path dynamically
+    const pdfUrl = `../pdf/sdg-${sdgNumber}-report-${selectedYear}.pdf`;
+
+    // Check if file exists
+    const exists = await checkFileExists(pdfUrl);
+
+    if (exists) {
+      sdgReportButton.onclick = () => openModal(pdfUrl);
+      sdgReportButton.disabled = false;
+      sdgReportButton.textContent = "VIEW FULL SDG REPORT";
+    } else {
+      // Fallback behavior if no file found
+      sdgReportButton.onclick = () => {
+        alert(`No SDG #${sdgNumber} report available for ${selectedYear}.`);
+      };
+      sdgReportButton.disabled = true;
+      sdgReportButton.textContent = `NO REPORT FOR ${selectedYear}`;
+    }
   }
 
   // Enhanced helper function to update dropdown button text
@@ -482,7 +528,7 @@ let pdfDoc = null,
   pageNum = 1,
   pageIsRendering = false,
   pageNumIsPending = null,
-  scale = 2.0;
+  scale = 1.0;
 
 const canvas = document.querySelector("#pdf-render");
 const ctx = canvas ? canvas.getContext("2d") : null;

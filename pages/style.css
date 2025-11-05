@@ -27,6 +27,7 @@
   text-align: center;
   border-radius: 0.4rem;
   transition: all 0.4s ease-out;
+  align-items: center;
   text-decoration: none;
   background-color: #27ae60;
   border: none;
@@ -100,19 +101,20 @@
 
 .content {
   gap: 1rem;
-  display: grid;
   padding: 1rem;
+  display: grid;
 }
 
 .content img {
   object-fit: scale-down;
+  width: 100%;
 }
 
 .text {
   padding: 2rem;
   border-radius: 0.4rem;
   box-shadow: 4px 4px 10px #ede9e9, -4px -4px 10px rgb(243, 239, 239);
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: column;
   text-align: justify;
   line-height: 1.5;
