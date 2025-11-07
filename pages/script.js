@@ -1,4 +1,3 @@
-// Base script functions remain the same
 window.addEventListener("load", () => {
   let hero = document.querySelector("#hero");
   if (hero) {
@@ -103,10 +102,8 @@ function createNavigation() {
 // Make sure all DOM content is loaded before initializing
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize navigation
-  // ... inside document.addEventListener("DOMContentLoaded", () => {
   const availableYears = createNavigation();
 
-  // ADD THIS HELPER FUNCTION
   function slugify(str) {
     if (!str) return "";
     return str
@@ -115,8 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/[\s_]+/g, "-") // replace spaces/underscores with dashes
       .replace(/^-+|-+$/g, ""); // remove leading/trailing dashes
   }
-
-  // ... rest of your code
 
   if (!availableYears || availableYears.length === 0) {
     console.warn("No SDG year options available");
@@ -160,18 +155,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Function to render 1st-style articles (array format)
-  function render1stLayout(articles) {
+  function render1stLayout(articles, dataYear) {
     articles.forEach((article) => {
       const articleElement = document.createElement("section");
       articleElement.className = `project`;
 
       // --- NEW: Create unique ID ---
       const projectSlug = slugify(article.title);
-      const projectId = `${year}-${projectSlug}`; // e.g., "2026-project-title"
+      const projectId = `${dataYear}-${projectSlug}`; // e.g., "2026-project-title"
       articleElement.id = projectId;
       // --- End new ---
 
-      articleElement.setAttribute("data-year", year); // Fixed to use the 'year' param
+      articleElement.setAttribute("data-year", dataYear);
 
       const paragraphs = article.content.map((p) => `<p>${p}</p>`).join("");
 
@@ -209,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Function to render 2024-style content (array of objects with sections format)
-  function render2ndLayout(dataArray) {
+  function render2ndLayout(dataArray, dataYear) {
     // Check if dataArray is actually an array
     if (!Array.isArray(dataArray)) {
       console.error("Expected array but got:", typeof dataArray);
@@ -231,11 +226,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // --- NEW: Create unique ID ---
       const projectSlug = slugify(data.title);
-      const projectId = `${year}-${projectSlug}`;
+      const projectId = `${dataYear}-${projectSlug}`;
       articleElement.id = projectId;
       // --- End new ---
 
-      articleElement.setAttribute("data-year", data.year);
+      articleElement.setAttribute("data-year", dataYear);
 
       let sectionsHtml = "";
 
@@ -384,27 +379,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDropdownText(selectedYear);
     // Save the selected year to localStorage with SDG-specific key
     localStorage.setItem(`selectedSDGYear_${sdgNumber}`, selectedYear);
-
-    // --- ADD THIS SNIPPET ---
-    // Check for hash and scroll to element
-    const urlHash = window.location.hash.substring(1);
-    if (urlHash) {
-      // Use a small timeout to ensure the DOM is fully painted
-      setTimeout(() => {
-        try {
-          const targetElement = document.getElementById(urlHash);
-          if (targetElement) {
-            targetElement.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-        } catch (e) {
-          console.warn("Could not scroll to element:", urlHash, e);
-        }
-      }, 100); // 100ms delay
-    }
-    // --- END SNIPPET ---
   }
 
   // === SDG REPORT PDF HANDLER ===
@@ -558,23 +532,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Initialize with stored year or default to most recent available year
-  // REPLACE this entire function
-  function initializeYear() {
+  async function initializeYear() {
+    // Make the function async
     const storedYear = localStorage.getItem(`selectedSDGYear_${sdgNumber}`);
     let initialYear;
 
-    // NEW: Check for a hash in the URL
-    const urlHash = window.location.hash.substring(1); // e.g., "2026-project-title"
+    // Get the hash from the URL (e.g., "2026-project-title")
+    const urlHash = window.location.hash.substring(1);
 
     if (urlHash) {
-      const yearFromHash = urlHash.split("-")[0]; // Gets the "2026" part
+      // Get the "2026" part
+      const yearFromHash = urlHash.split("-")[0];
       if (yearFromHash && availableYears.includes(yearFromHash)) {
         initialYear = yearFromHash;
       }
     }
-    // END NEW
 
-    // Fallback to stored year or default
+    // Fallback logic
     if (!initialYear) {
       if (storedYear && availableYears.includes(storedYear)) {
         initialYear = storedYear;
@@ -585,9 +559,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     console.log("Initializing with year:", initialYear);
-    displayContentForYear(initialYear);
-  }
 
+    // --- THIS IS THE KEY FIX ---
+    // Wait for the content to be fetched and rendered
+    await displayContentForYear(initialYear);
+
+    // Now that rendering is complete, handle the scroll
+    if (urlHash) {
+      // Use a 0ms timeout. This pushes the scroll command to the
+      // end of the execution queue, ensuring the browser has
+      // "painted" the new elements to the screen first.
+      setTimeout(() => {
+        try {
+          const targetElement = document.getElementById(urlHash);
+          if (targetElement) {
+            console.log("Scrolling to:", urlHash);
+            targetElement.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          } else {
+            console.warn("Target element not found for hash:", urlHash);
+          }
+        } catch (e) {
+          console.warn("Could not scroll to element:", urlHash, e);
+        }
+      }, 0); // A 0ms delay is all that's needed
+    }
+    // --- END OF FIX ---
+  }
   // Start the application
   initializeYear();
 });
