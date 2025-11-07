@@ -103,7 +103,20 @@ function createNavigation() {
 // Make sure all DOM content is loaded before initializing
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize navigation
+  // ... inside document.addEventListener("DOMContentLoaded", () => {
   const availableYears = createNavigation();
+
+  // ADD THIS HELPER FUNCTION
+  function slugify(str) {
+    if (!str) return "";
+    return str
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "") // remove special chars
+      .replace(/[\s_]+/g, "-") // replace spaces/underscores with dashes
+      .replace(/^-+|-+$/g, ""); // remove leading/trailing dashes
+  }
+
+  // ... rest of your code
 
   if (!availableYears || availableYears.length === 0) {
     console.warn("No SDG year options available");
@@ -151,12 +164,22 @@ document.addEventListener("DOMContentLoaded", () => {
     articles.forEach((article) => {
       const articleElement = document.createElement("section");
       articleElement.className = `project`;
-      articleElement.setAttribute("data-year", article.year);
+
+      // --- NEW: Create unique ID ---
+      const projectSlug = slugify(article.title);
+      const projectId = `${year}-${projectSlug}`; // e.g., "2026-project-title"
+      articleElement.id = projectId;
+      // --- End new ---
+
+      articleElement.setAttribute("data-year", year); // Fixed to use the 'year' param
 
       const paragraphs = article.content.map((p) => `<p>${p}</p>`).join("");
 
+      // --- MODIFIED innerHTML ---
       articleElement.innerHTML = `
-        <h1>${article.title}</h1>
+        <h1><a href="#${projectId}" class="project-title-link">${
+        article.title
+      }</a></h1>
         <section class="content ${article.layout}">
           ${
             article.layout === "left-img"
@@ -180,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         </section>
       `;
+      // --- End modified ---
       articlesContainer.appendChild(articleElement);
     });
   }
@@ -204,6 +228,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const articleElement = document.createElement("section");
       articleElement.className = `project`;
+
+      // --- NEW: Create unique ID ---
+      const projectSlug = slugify(data.title);
+      const projectId = `${year}-${projectSlug}`;
+      articleElement.id = projectId;
+      // --- End new ---
+
       articleElement.setAttribute("data-year", data.year);
 
       let sectionsHtml = "";
@@ -266,14 +297,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
+      // --- MODIFIED innerHTML ---
       articleElement.innerHTML = `
-      <h1>${data.title}</h1>
-      <section class="content single-article">
-        <section class="text">
-          ${sectionsHtml}
+        <h1><a href="#${projectId}" class="project-title-link">${data.title}</a></h1>
+        <section class="content single-article">
+          <section class="text">
+            ${sectionsHtml}
+          </section>
         </section>
-      </section>
-    `;
+      `;
+      // --- End modified ---
 
       articlesContainer.appendChild(articleElement);
     });
@@ -327,12 +360,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Render 2024-style items (with sections)
           if (sectionsFormatItems.length > 0) {
-            render2ndLayout(sectionsFormatItems);
+            render2ndLayout(sectionsFormatItems, selectedYear); // Pass year
           }
 
           // Render 2023-style items (simple format)
           if (simpleFormatItems.length > 0) {
-            render1stLayout(simpleFormatItems);
+            render1stLayout(simpleFormatItems, selectedYear); // Pass year
           }
         } else {
           console.warn(`Unknown data structure for year ${selectedYear}`);
@@ -351,6 +384,27 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDropdownText(selectedYear);
     // Save the selected year to localStorage with SDG-specific key
     localStorage.setItem(`selectedSDGYear_${sdgNumber}`, selectedYear);
+
+    // --- ADD THIS SNIPPET ---
+    // Check for hash and scroll to element
+    const urlHash = window.location.hash.substring(1);
+    if (urlHash) {
+      // Use a small timeout to ensure the DOM is fully painted
+      setTimeout(() => {
+        try {
+          const targetElement = document.getElementById(urlHash);
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        } catch (e) {
+          console.warn("Could not scroll to element:", urlHash, e);
+        }
+      }, 100); // 100ms delay
+    }
+    // --- END SNIPPET ---
   }
 
   // === SDG REPORT PDF HANDLER ===
@@ -504,15 +558,30 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Initialize with stored year or default to most recent available year
+  // REPLACE this entire function
   function initializeYear() {
     const storedYear = localStorage.getItem(`selectedSDGYear_${sdgNumber}`);
     let initialYear;
 
-    if (storedYear && availableYears.includes(storedYear)) {
-      initialYear = storedYear;
-    } else {
-      // Default to the most recent year (last in array)
-      initialYear = availableYears[availableYears.length - 1];
+    // NEW: Check for a hash in the URL
+    const urlHash = window.location.hash.substring(1); // e.g., "2026-project-title"
+
+    if (urlHash) {
+      const yearFromHash = urlHash.split("-")[0]; // Gets the "2026" part
+      if (yearFromHash && availableYears.includes(yearFromHash)) {
+        initialYear = yearFromHash;
+      }
+    }
+    // END NEW
+
+    // Fallback to stored year or default
+    if (!initialYear) {
+      if (storedYear && availableYears.includes(storedYear)) {
+        initialYear = storedYear;
+      } else {
+        // Default to the most recent year (last in array)
+        initialYear = availableYears[availableYears.length - 1];
+      }
     }
 
     console.log("Initializing with year:", initialYear);

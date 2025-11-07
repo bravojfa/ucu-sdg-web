@@ -905,3 +905,14 @@ canvas {
     transform: rotate(360deg);
   }
 }
+
+/* Removes default link styling from project titles */
+.project-title-link {
+  color: inherit; /* Inherits the h1 color */
+  text-decoration: none;
+}
+
+/* Optional: Add a subtle effect on hover */
+.project-title-link:hover {
+  text-decoration: underline;
+}
