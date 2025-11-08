@@ -33,7 +33,7 @@ function createNavigation() {
         </section>
         
         <section class="mobile">
-          <a href="../index.html">Go Home</a>
+          <a href="../index.html">Home</a>
         </section>
       </header>
   `;
