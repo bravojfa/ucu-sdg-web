@@ -751,4 +751,160 @@ const research2024 = [
       "The study recommends webinars, DTI programs, and a survival plan to help small-scale business owners adapt and sustain operations during crises.",
     ],
   },
+  {
+    title:
+      "Assessing Water Quality at Urdaneta City University: A Study on Access to Clean and Safe Drinking Water",
+    authors:
+      "Julie Ann Borsigue, Caroline Andrei T. Almeron, Kristine M. Gumangan, Allan D. Perez, Vener Abiett L. Castanaga, MA, Graciane Joy D. De Guzman, MA, Cristina F. Solomon, MEd",
+    sdgs: [
+      {
+        number: 3,
+        icon: "💚",
+        title: "Good Health and Well-Being",
+        targets: "Targets 3.3 and 3.9",
+        color: "#2ca02c",
+        content: [
+          "The study highlights the importance of safe drinking water to protect the health of the UCU community.",
+          "It identifies bacterial contamination in drinking fountains as a public health concern.",
+        ],
+        alignment:
+          "Promotes well-being by ensuring access to safe water and mitigating health risks associated with contamination.",
+      },
+      {
+        number: 6,
+        icon: "💧",
+        title: "Clean Water and Sanitation",
+        targets: "Targets 6.1 and 6.3",
+        color: "#1f77b4",
+        content: [
+          "The study evaluates physico-chemical and microbiological quality of drinking water on campus.",
+          "It emphasizes the need for formal monitoring protocols and corrective actions to maintain water safety.",
+        ],
+        alignment:
+          "Supports sustainable water management and sanitation by ensuring safe and clean water access for all university stakeholders.",
+      },
+      {
+        number: 11,
+        icon: "🏙️",
+        title: "Sustainable Cities and Communities",
+        targets: "Target 11.6",
+        color: "#fd9d24",
+        content: [
+          "The study underscores the importance of maintaining a safe and healthy environment on campus.",
+          "It promotes policies and procedures to manage water resources responsibly within institutional settings.",
+        ],
+        alignment:
+          "Enhances the sustainability and livability of university communities through safe water access and environmental management.",
+      },
+    ],
+    abstract: [
+      "This research evaluated the quality and safety of drinking water at Urdaneta City University (UCU), focusing on safeguarding the health of students, staff, and visitors.",
+      "Document analysis of water samples from drinking fountains and bottled water was conducted using microbiological and physico-chemical testing.",
+      "Results showed that bottled water met safety standards, while drinking fountain water exhibited bacterial contamination.",
+      "The study recommends establishing formal water quality monitoring protocols and policies to ensure safe drinking water and promote community well-being.",
+    ],
+  },
+  {
+    title: "Crop Insurance Awareness of Marginal Farmers",
+    authors: "Not specified",
+    sdgs: [
+      {
+        number: 1,
+        icon: "💰",
+        title: "No Poverty",
+        targets: "Target 1.5",
+        color: "#e5243b",
+        content: [
+          "The study highlights that most marginal farmers have not availed of crop insurance, leaving them vulnerable to income loss caused by natural calamities.",
+          "It recommends increasing awareness and access to crop insurance as a financial safety net for poor farmers.",
+        ],
+        alignment:
+          "Supports poverty reduction by promoting access to social protection mechanisms that mitigate economic losses from agricultural risks.",
+      },
+      {
+        number: 2,
+        icon: "🌾",
+        title: "Zero Hunger",
+        targets: "Targets 2.3 and 2.4",
+        color: "#dda63a",
+        content: [
+          "The study emphasizes the importance of crop insurance in sustaining agricultural productivity and food security.",
+          "Improved awareness can enhance farmers’ resilience, ensuring stable food production and livelihood sustainability.",
+        ],
+        alignment:
+          "Contributes to ending hunger by supporting small-scale farmers in adopting risk mitigation measures to maintain food supply and income stability.",
+      },
+      {
+        number: 13,
+        icon: "🌍",
+        title: "Climate Action",
+        targets: "Target 13.1",
+        color: "#3f7e44",
+        content: [
+          "Recognizes crop insurance as a tool to reduce the vulnerability of marginal farmers to climate-related disasters.",
+          "Promotes adaptation strategies to protect agricultural livelihoods from the impacts of extreme weather events.",
+        ],
+        alignment:
+          "Enhances climate resilience by advocating for policies and awareness programs that help farmers prepare for and recover from natural calamities.",
+      },
+    ],
+    abstract: [
+      "This study examined the awareness level of marginal farmers regarding crop insurance as a risk mitigation strategy.",
+      "Using descriptive analysis, it found that most farmers were male, secondary school graduates, and long-time tenants with small farmland holdings.",
+      "Nearly all respondents had not availed of crop insurance, showing low awareness across perception, benefit, product, and process dimensions.",
+      "The study recommends implementing an information dissemination plan to increase farmers’ awareness and encourage the use of crop insurance for financial and climate resilience.",
+    ],
+  },
+  {
+    title:
+      "Status of Rice Production in Villasis Pangasinan: Attuned to a Productivity Enhancement Program",
+    authors: "Not specified",
+    sdgs: [
+      {
+        number: 2,
+        icon: "🌾",
+        title: "Zero Hunger",
+        targets: "Targets 2.3 and 2.4",
+        color: "#dda63a",
+        content: [
+          "The study focused on improving rice productivity through enhanced use of fertilizers, pesticides, improved seed varieties, and efficient milling operations.",
+          "It proposed a productivity enhancement program to help farmers increase yield and income while ensuring food security at the local level.",
+        ],
+        alignment:
+          "Supports agricultural productivity and sustainable food production systems by strengthening the capacity of small-scale farmers.",
+      },
+      {
+        number: 8,
+        icon: "💼",
+        title: "Decent Work and Economic Growth",
+        targets: "Target 8.3",
+        color: "#a21942",
+        content: [
+          "The study promotes rural economic growth by identifying practices that enhance rice farmers’ income and productivity.",
+          "Encourages capacity-building programs and better resource utilization to improve livelihoods of farming households.",
+        ],
+        alignment:
+          "Fosters inclusive and sustainable economic growth through improved agricultural productivity and local employment generation.",
+      },
+      {
+        number: 12,
+        icon: "♻️",
+        title: "Responsible Consumption and Production",
+        targets: "Target 12.2",
+        color: "#bf8b2e",
+        content: [
+          "Highlights the efficient use of farming inputs such as fertilizers and pesticides to ensure sustainability in production.",
+          "Encourages awareness and training to prevent overuse of chemicals that can harm the environment and soil quality.",
+        ],
+        alignment:
+          "Supports sustainable resource management and responsible agricultural production practices.",
+      },
+    ],
+    abstract: [
+      "This study investigated the status of rice production in Villasis, Pangasinan, focusing on fertilizer use, pesticides, seed variety, and milling operations.",
+      "Using a descriptive survey design, data were gathered from 180 rice farmers across Barangays Bacag and Tombod.",
+      "Findings revealed that most farmers were middle-aged, male, married, and secondary graduates, with significant income from both cropping seasons.",
+      "Results showed a strong agreement that the identified variables positively influence rice productivity, leading to the recommendation of a productivity enhancement program to further improve agricultural performance and farmers’ income.",
+    ],
+  },
 ];

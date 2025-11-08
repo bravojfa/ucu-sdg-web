@@ -105,12 +105,11 @@ function renderAllResearchForSDG(sdgNumber) {
     const projectId = `${research.year}-${projectSlug}`;
     section.id = projectId;
 
-    // Research Header with year badge
+    // Research Header
     const header = `
       <div class="research-header">
         <h1>
           <a href="#${projectId}" class="project-title-link">${research.title}</a>
-          <span class="year-badge">${research.year}</span>
         </h1>
         <div class="authors">${research.authors}</div>
       </div>
