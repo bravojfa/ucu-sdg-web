@@ -37,7 +37,7 @@ function createNavigation() {
 
         <section class="desktop">
           <a href="index.html">Home</a>
-          <a href="#">SDG Reports</a>
+          <a href="sdg-reports/index.html">SDG Reports</a>
           <a href="sdg-research/index.html">SDG Research</a>
           <a href="ucu-smart-eco-campus.html">Smart Eco Campus</a>
           <div class="themes-dropdown">
