@@ -440,8 +440,7 @@ footer {
 
 /* Initially hide all year-specific SDG sections except the default one */
 .sdg-2023,
-.sdg-2024,
-.sdg-2025 {
+.sdg-2024 {
   display: none;
 }
 

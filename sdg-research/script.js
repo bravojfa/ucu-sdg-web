@@ -29,7 +29,7 @@ function createNavigation() {
           <h3>SDG Research</h3>
         </section>
         <section class="desktop">
-          <a href="../index.html">Go Home</a>
+          <a href="../index.html">Home</a>
         </section>
         
         <section class="mobile">

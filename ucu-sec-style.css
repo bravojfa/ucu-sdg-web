@@ -20,8 +20,9 @@ ul {
 }
 
 header {
-  display: grid;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   grid-template-columns: 1fr auto;
   border-bottom: 2px solid #701212;
   background-color: #912020;

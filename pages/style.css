@@ -20,23 +20,66 @@
   }
 }
 
-.sdg section button {
-  display: grid;
-  padding: 0.6rem;
-  font-weight: bold;
-  text-align: center;
-  border-radius: 0.4rem;
-  transition: all 0.4s ease-out;
-  align-items: center;
-  text-decoration: none;
-  background-color: #27ae60;
+/* Button Styling */
+#sdg-report-btn {
+  align-self: flex-start;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #e63946 0%, #d62828 100%);
   border: none;
-  outline: none;
-  color: white;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
 }
 
-.sdg section button:hover {
-  transform: scale(1.04);
+#sdg-report-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+#sdg-report-btn:hover::before {
+  left: 100%;
+}
+
+#sdg-report-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(230, 57, 70, 0.4);
+  background: linear-gradient(135deg, #d62828 0%, #c1121f 100%);
+}
+
+#sdg-report-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .sdg img {

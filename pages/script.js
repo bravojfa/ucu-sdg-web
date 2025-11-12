@@ -19,7 +19,7 @@ if (navigation) {
 // Create the navigation content with dynamic year dropdown and themes dropdown
 function createNavigation() {
   // Available years for SDG content - easily expandable for future years
-  const availableYears = ["2023", "2024", "2025", "2026"]; // Add new years here
+  const availableYears = ["2023", "2024"]; // Add new years here
 
   // Create year dropdown items HTML
   const yearOptions = availableYears
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // --- NEW: Create unique ID ---
       const projectSlug = slugify(article.title);
-      const projectId = `${dataYear}-${projectSlug}`; // e.g., "2026-project-title"
+      const projectId = `${dataYear}-${projectSlug}`; // e.g., "2024-project-title"
       articleElement.id = projectId;
       // --- End new ---
 
@@ -185,7 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <section class="text">
               ${paragraphs}
               <section class="file">
-                <button onclick="openModal('${article.documentUrl}')">
+                <button id="sdg-report-btn" onclick="openModal('${
+                  article.documentUrl
+                }')">
                   READ FULL DOCUMENT
                 </button>
               </section>
@@ -537,11 +539,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const storedYear = localStorage.getItem(`selectedSDGYear_${sdgNumber}`);
     let initialYear;
 
-    // Get the hash from the URL (e.g., "2026-project-title")
+    // Get the hash from the URL (e.g., "2024-project-title")
     const urlHash = window.location.hash.substring(1);
 
     if (urlHash) {
-      // Get the "2026" part
+      // Get the "2024" part
       const yearFromHash = urlHash.split("-")[0];
       if (yearFromHash && availableYears.includes(yearFromHash)) {
         initialYear = yearFromHash;

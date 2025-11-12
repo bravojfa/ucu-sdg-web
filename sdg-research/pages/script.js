@@ -1,8 +1,8 @@
 // This file aggregates all yearly research data
 const researchData = {
-  2022: research2022,
-  2023: research2023,
-  2024: research2024,
+  1: batch1,
+  2: batch2,
+  3: batch3,
 };
 
 window.addEventListener("load", () => {
